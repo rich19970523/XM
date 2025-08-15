@@ -3,284 +3,135 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HOME体育 - 专业体育用品供应商</title>
+    <title>运营团队管理方案建议书合集</title>
+    <!-- 引入Inter字体 -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap">
+    <!-- 引入Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Inter', 'Noto Sans SC', sans-serif;
-        }
-        .hero-bg {
-            background: linear-gradient(45deg, #0f172a, #1e3a8a); /* 深蓝渐变背景 */
-        }
-
-        /* 定义入场动画 */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* 应用于需要动画的元素，初始状态为透明 */
-        .animate-on-scroll {
-            opacity: 0;
-            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
-        }
-
-        /* 当元素可见时，触发动画 */
-        .is-visible {
-            animation: fadeInUp 0.8s ease forwards;
-        }
-        
-        /* 产品卡片图标样式 */
-        .product-icon-bg {
-            height: 12rem; /* 192px */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: #f3f4f6; /* gray-100 */
-        }
-        .product-icon-bg svg {
-            width: 4rem; /* 64px */
-            height: 4rem; /* 64px */
-            color: #3b82f6; /* blue-500 */
-            transition: transform 0.3s ease;
-        }
-        .product-card:hover .product-icon-bg svg {
-            transform: scale(1.1);
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            color: #374151;
+            line-height: 1.6;
         }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-800">
+<body class="p-4 md:p-8">
 
-    <!-- Header -->
-    <header class="bg-white shadow-md sticky top-0 z-50">
-        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <div class="flex items-center space-x-2">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-600" viewBox="0 0 20 20" fill="currentColor">
-                    <path d="M5.5 16.5A2.5 2.5 0 013 14V6a2.5 2.5 0 015 0v8a2.5 2.5 0 01-2.5 2.5zM14.5 16.5a2.5 2.5 0 01-2.5-2.5V6a2.5 2.5 0 015 0v8a2.5 2.5 0 01-2.5 2.5z"/>
-                </svg>
-                <h1 class="text-2xl font-bold text-gray-800">HOME体育</h1>
-            </div>
-            <nav class="hidden md:flex space-x-8">
-                <a href="#home" class="text-gray-600 hover:text-blue-600 transition duration-300">首页</a>
-                <a href="#products" class="text-gray-600 hover:text-blue-600 transition duration-300">产品中心</a>
-                <a href="#about" class="text-gray-600 hover:text-blue-600 transition duration-300">关于我们</a>
-                <a href="#contact" class="text-gray-600 hover:text-blue-600 transition duration-300">联系我们</a>
-            </nav>
-            <a href="#contact" class="hidden md:inline-block bg-blue-600 text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-700 transition duration-300 transform hover:scale-105">
-                大宗采购洽谈
-            </a>
-            <button id="mobile-menu-button" class="md:hidden text-gray-600">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
-                </svg>
-            </button>
-        </div>
-        <!-- Mobile Menu -->
-        <div id="mobile-menu" class="hidden md:hidden px-6 pt-2 pb-4">
-            <a href="#home" class="block py-2 text-gray-600 hover:text-blue-600">首页</a>
-            <a href="#products" class="block py-2 text-gray-600 hover:text-blue-600">产品中心</a>
-            <a href="#about" class="block py-2 text-gray-600 hover:text-blue-600">关于我们</a>
-            <a href="#contact" class="block py-2 text-gray-600 hover:text-blue-600">联系我们</a>
-            <a href="#contact" class="block mt-2 w-full text-center bg-blue-600 text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-700 transition duration-300">大宗采购洽谈</a>
-        </div>
-    </header>
+    <!-- 主容器 -->
+    <div class="max-w-4xl mx-auto bg-white shadow-lg rounded-xl p-6 md:p-10 my-8 border border-gray-200">
 
-    <main>
-        <!-- Hero Section -->
-        <section id="home" class="hero-bg text-white">
-            <div class="container mx-auto px-6 py-32 text-center">
-                <h2 class="text-5xl md:text-6xl font-bold leading-tight mb-4 animate-on-scroll">巅峰之选，动力无限</h2>
-                <p class="text-xl md:text-2xl mb-8 text-gray-200 animate-on-scroll" style="animation-delay: 0.2s;">为每一个追求卓越的团队和个人，提供专业级运动装备</p>
-                <a href="#products" class="bg-white text-blue-600 font-bold text-lg px-8 py-4 rounded-lg hover:bg-gray-200 transition duration-300 transform hover:scale-105 animate-on-scroll" style="animation-delay: 0.4s;">浏览我们的产品</a>
-            </div>
+        <!-- 总标题 -->
+        <header class="text-center pb-6 mb-6">
+            <h1 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-2">运营团队管理与业务增长方案建议书</h1>
+            <p class="text-lg text-gray-600 font-semibold mt-4">致：Evan 主席</p>
+        </header>
+        
+        <!-- 第一份方案：运营管理优化及业务增长 -->
+        <section class="border-b border-gray-200 pb-6 mb-6">
+            <h2 class="text-xl md:text-2xl font-bold text-gray-900 mb-4">第一部分：构建高效运营管理体系，驱动业务数据稳健增长</h2>
+            
+            <main class="text-gray-700 leading-relaxed">
+                <p class="mb-4">尊敬的 Evan 主席：</p>
+                <p class="mb-6">您好！</p>
+                <p class="mb-6">为响应公司战略目标，提升运营团队的整体效能和业务产出，我基于当前团队工作现状，结合科学管理方法论，特制定此份运营管理优化方案。本方案旨在将团队工作从<strong class="font-bold text-gray-900">“执行驱动”升级为“数据驱动与增长驱动”</strong>，以确保运营工作能更高效、更精准地支撑公司业务发展。</p>
+                
+                <h3 class="text-xl font-bold text-gray-900 mt-8 mb-4 border-l-4 border-blue-500 pl-4">一、 方案核心价值：解决痛点，驱动增长</h3>
+                <p class="mb-4">当前，运营团队面临的核心挑战在于：</p>
+                <ul class="list-disc list-inside space-y-2 mb-6 ml-4">
+                    <li><strong class="font-semibold text-gray-900">效率瓶颈：</strong>缺乏标准化流程，导致跨部门沟通成本高，返工率居高不下。</li>
+                    <li><strong class="font-semibold text-gray-900">目标模糊：</strong>日常工作与公司战略目标关联度不强，团队工作量大但方向感不足。</li>
+                    <li><strong class="font-semibold text-gray-900">能力提升：</strong>团队缺乏系统性培养和知识沉淀机制，个人能力提升缓慢。</li>
+                </ul>
+                <p class="mb-4">本方案旨在通过以下三大核心举措，根本性解决上述问题：</p>
+                <ul class="list-disc list-inside space-y-2 mb-6 ml-4">
+                    <li><strong class="font-semibold text-gray-900">流程化管理：</strong>通过构建标准操作流程（SOP），将高频工作标准化、自动化，大幅提升工作效率。</li>
+                    <li><strong class="font-semibold text-gray-900">数据化决策：</strong>建立以KPI为核心的目标管理体系，所有工作都将与可量化的业务指标挂钩，确保每一份投入都产生可衡量的回报。</li>
+                    <li><strong class="font-semibold text-gray-900">系统化培养：</strong>建立知识沉淀与人才培养机制，将个人经验转化为团队资产，构建学习型组织。</li>
+                </ul>
+
+                <h3 class="text-xl font-bold text-gray-900 mt-8 mb-4 border-l-4 border-blue-500 pl-4">二、 核心举措与具体执行方案</h3>
+                <p class="mb-4">我计划分阶段、有步骤地落地以下关键举措：</p>
+                
+                <h4 class="text-lg font-semibold text-gray-900 mt-6 mb-2">1. 建立敏捷高效的工作流</h4>
+                <ul class="list-disc list-inside space-y-2 mb-6 ml-4">
+                    <li><strong class="font-semibold text-gray-900">周一启动会（15分钟）：</strong>替代冗长会议，聚焦本周北极星指标，快速同步任务与责任人，确保全员目标对齐。</li>
+                    <li><strong class="font-semibold text-gray-900">周五复盘会（45-60分钟）：</strong>以数据分析为驱动，深入剖析本周成果与问题。关键在于“归因分析”，旨在沉淀成功经验，避免重复犯错。</li>
+                    <li><strong class="font-semibold text-gray-900">日报/周报体系：</strong>采用全新模板，日报聚焦<strong class="font-bold text-gray-900">“进度与风险”</strong>，周报聚焦<strong class="font-bold text-gray-900">“成果与洞察”</strong>，让汇报更精炼、更有价值。</li>
+                </ul>
+
+                <h4 class="text-lg font-semibold text-gray-900 mt-6 mb-2">2. 引入标准化管理工具与流程</h4>
+                <ul class="list-disc list-inside space-y-2 mb-6 ml-4">
+                    <li><strong class="font-semibold text-gray-900">项目管理工具（如JIRA）：</strong>所有任务将通过看板进行分配、追踪与管理，实现信息透明，降低口头沟通成本。</li>
+                    <li><strong class="font-semibold text-gray-900">Bug处理SOP：</strong>针对技术对接这一高频场景，制定标准化流程。明确提报信息、处理时效与跟进机制，以确保问题能被快速、准确地解决，显著减少团队内耗。</li>
+                </ul>
+
+                <h4 class="text-lg font-semibold text-gray-900 mt-6 mb-2">3. KPI量化管理与激励机制</h4>
+                <p class="mb-4">为确保团队目标的清晰性与执行力，我将引入一套完整的<strong class="font-bold text-gray-900">KPI（关键绩效指标）</strong>管理体系，将其与日常工作和绩效评估紧密结合。</p>
+                
+                <p class="mb-6">通过这套KPI管理体系，我们将确保每一位团队成员都清楚自己的工作目标和价值所在，形成<strong class="font-bold text-gray-900">“目标→行动→数据→复盘”</strong>的良性循环，真正实现业务的内生增长。</p>
+                
+                <h3 class="text-xl font-bold text-gray-900 mt-8 mb-4 border-l-4 border-blue-500 pl-4">三、 预期效果与回报</h3>
+                <p class="mb-4">通过本方案的实施，我预估将在以下方面取得显著成效：</p>
+                <ul class="list-disc list-inside space-y-2 mb-6 ml-4">
+                    <li><strong class="font-semibold text-gray-900">运营效率提升20%以上：</strong>流程的标准化和工具的引入，将大幅减少沟通与返工时间，释放团队更多精力投入到创新和增长上。</li>
+                    <li><strong class="font-semibold text-gray-900">关键业务指标稳健增长：</strong>数据驱动的决策将使运营策略更精准，预计关键业务指标（如月活、转化率）将实现稳定增长。</li>
+                    <li><strong class="font-semibold text-gray-900">团队能力系统性增强：</strong>知识沉淀和内部培训机制将使团队成员的专业技能得到快速提升，为公司储备更多核心人才。</li>
+                </ul>
+                <p class="mb-6">本方案旨在从根本上改变我们的工作方式，将运营团队打造成一个具有强大执行力、数据分析能力和创新精神的增长引擎。我坚信，在您的支持下，我们能够顺利完成转型，为公司的长期发展贡献更大的价值。</p>
+            </main>
         </section>
 
-        <!-- About Us Section -->
-        <section id="about" class="py-20 bg-white">
-            <div class="container mx-auto px-6">
-                <div class="text-center max-w-4xl mx-auto">
-                    <h2 class="text-4xl font-bold text-gray-800 mb-4 animate-on-scroll">关于HOME体育</h2>
-                    <p class="text-lg text-gray-600 mt-4 mb-8 animate-on-scroll" style="animation-delay: 0.2s;">我们不仅仅是销售产品，更是传递运动精神的伙伴。</p>
-                    <p class="text-gray-600 mb-12 leading-relaxed animate-on-scroll" style="animation-delay: 0.4s;">HOME体育致力于通过提供高品质、高性能的体育用品，激发每一位用户的运动潜能。我们相信，精良的装备是取得优异成绩的基石。无论是专业运动员、学校社团还是企业团队，我们都将以最严格的标准，为您提供最可靠的支持。</p>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                        <div class="bg-gray-100 p-6 rounded-lg flex flex-col items-center justify-center text-center animate-on-scroll" style="animation-delay: 0.1s;">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-blue-600 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                            <span class="font-semibold">品质保证</span>
-                        </div>
-                        <div class="bg-gray-100 p-6 rounded-lg flex flex-col items-center justify-center text-center animate-on-scroll" style="animation-delay: 0.2s;">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-blue-600 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
-                            <span class="font-semibold">技术创新</span>
-                        </div>
-                        <div class="bg-gray-100 p-6 rounded-lg flex flex-col items-center justify-center text-center animate-on-scroll" style="animation-delay: 0.3s;">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-blue-600 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
-                            <span class="font-semibold">客户至上</span>
-                        </div>
-                         <div class="bg-gray-100 p-6 rounded-lg flex flex-col items-center justify-center text-center animate-on-scroll" style="animation-delay: 0.4s;">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-blue-600 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10l2-2h8a1 1 0 001-1z" /></svg>
-                            <span class="font-semibold">可靠供应</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <!-- 第二份方案：强化团队纪律与绩效管理 -->
+        <section class="mt-8 pt-6">
+            <h2 class="text-xl md:text-2xl font-bold text-gray-900 mb-4">第二部分：通过构建严谨管理体系，驱动运营团队实现业绩飞跃</h2>
+
+            <main class="text-gray-700 leading-relaxed">
+                <p class="mb-4">尊敬的 Evan 主席：</p>
+                <p class="mb-6">您好！</p>
+                <p class="mb-6">在当前竞争激烈的市场环境中，团队执行力与运营效能已成为业务持续增长的核心驱动力。通过对运营团队的深入观察，我发现尽管团队成员工作投入度高，但在执行细节、纪律意识与绩效量化管理方面仍存在进一步优化的空间。为全面解决这些潜在问题，我特此提交一份关于<strong class="font-bold text-gray-900">强化团队纪律与绩效管理</strong>的方案建议。本方案旨在通过构建一套严谨、系统的管理体系，将运营团队重塑为一支纪律严明、高效执行、结果导向的精锐之师。</p>
+
+                <h3 class="text-xl font-bold text-gray-900 mt-8 mb-4 border-l-4 border-blue-500 pl-4">一、 核心理念：以纪律为基石，以绩效为导向</h3>
+                <p class="mb-4">我们深信，卓越的成果源于严谨的纪律与清晰的责任。当规则缺失或执行不力时，将导致内部摩擦、效率损耗，并最终偏离业务目标。因此，本方案的核心在于：</p>
+                <ul class="list-disc list-inside space-y-2 mb-6 ml-4">
+                    <li><strong class="font-semibold text-gray-900">消除内耗：</strong> 建立统一的行为规范，减少因个人因素导致的协作障碍和效率损失。</li>
+                    <li><strong class="font-semibold text-gray-900">强化责任：</strong> 将日常行为纪律与业务绩效紧密挂钩，确保每位成员的付出都直接贡献于团队目标。</li>
+                    <li><strong class="font-semibold text-gray-900">提升人效：</strong> 释放团队潜能，使每一位成员能够在有序可控的环境中，专注于创造更高价值。</li>
+                </ul>
+                
+                <h3 class="text-xl font-bold text-gray-900 mt-8 mb-4 border-l-4 border-blue-500 pl-4">二、 具体执行方案：纪律管理与绩效考核双轮驱动</h3>
+                <p class="mb-4">为将上述理念付诸实践，我已起草一份详细的《办公室管理办法与员工行为规范》，计划作为团队日常管理的指导准则。该文件不仅涵盖了考勤、办公行为等基础纪律，更将KPI奖惩规则量化、透明化，确保奖罚分明、公平公正。</p>
+                <p class="mb-4">本方案将重点落实以下措施：</p>
+                <ul class="list-disc list-inside space-y-2 mb-6 ml-4">
+                    <li><strong class="font-semibold text-gray-900">严谨的纪律管理：</strong> 针对迟到、旷工、工作期间非工作行为等，设定明确的处罚机制，旨在培养团队的职业精神和专业素养。</li>
+                    <li><strong class="font-semibold text-gray-900">量化的KPI奖惩体系：</strong> 将员工的薪酬与核心业务指标（KPI）直接关联，并设定明确的达成率与对应的奖惩规则。</li>
+                    <li><strong class="font-semibold text-gray-900">双重评估：</strong> 将日常行为规范与业务绩效结果相结合，构建一套完整的员工综合评估体系，确保团队既具备高效产出能力，又拥有专业的职业操守。</li>
+                </ul>
+
+                <h3 class="text-xl font-bold text-gray-900 mt-8 mb-4 border-l-4 border-blue-500 pl-4">三、 预期回报与风险控制</h3>
+                <p class="mb-4">通过实施这套严谨的管理体系，我们预期将为公司带来以下显著回报：</p>
+                <ul class="list-disc list-inside space-y-2 mb-6 ml-4">
+                    <li><strong class="font-semibold text-gray-900">团队效能提升：</strong> 纪律的强化将有效减少非生产性时间，预计团队整体效能将提升 <strong class="font-bold text-gray-900">[具体百分比，例如15%-20%]</strong>。</li>
+                    <li><strong class="font-semibold text-gray-900">业绩稳步增长：</strong> KPI的严格执行将确保团队工作始终聚焦于关键业务指标，有效推动业绩持续增长。</li>
+                    <li><strong class="font-semibold text-gray-900">人才结构优化：</strong> 本制度将筛选出真正具备高执行力、高产出能力的优秀人才，形成积极向上、优胜劣汰的良性循环。</li>
+                </ul>
+                <p class="mb-6">在推行过程中，我将确保制度的公正性和透明度，并与团队成员进行充分沟通，解释其背后的逻辑与价值，以争取全员的理解和支持。</p>
+
+                <h3 class="text-xl font-bold text-gray-900 mt-8 mb-4 border-l-4 border-blue-500 pl-4">四、 总结与展望</h3>
+                <p class="mb-4">一个卓越的团队，离不开强大的执行力和明确的规则。本方案正是基于这一核心理念，旨在为运营团队提供一个更高效、更有序的工作框架。</p>
+                <p class="mb-6">我已做好充分准备，将以身作则，确保方案的顺利推行。我坚信，在您的支持下，我们将能够打造一支能打硬仗、善打胜仗的精英团队，为公司的长远发展贡献核心力量。</p>
+            </main>
         </section>
 
-        <!-- Products Section -->
-        <section id="products" class="py-20">
-            <div class="container mx-auto px-6">
-                <div class="text-center mb-12 animate-on-scroll">
-                    <h2 class="text-4xl font-bold text-gray-800">产品中心</h2>
-                    <p class="text-lg text-gray-600 mt-4 max-w-3xl mx-auto">我们提供全面的体育用品解决方案，满足您多样化的需求。</p>
-                </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                    <!-- Product Cards -->
-                    <div class="product-card bg-white rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 animate-on-scroll">
-                        <div class="product-icon-bg"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12.792V6.343A1.875 1.875 0 0019.125 4.5H4.875A1.875 1.875 0 003 6.343v6.45a1.875 1.875 0 001.875 1.875h14.25a1.875 1.875 0 001.875-1.875z" /><path stroke-linecap="round" stroke-linejoin="round" d="M21 12.792c-.035.02-.07.038-.105.055-1.011.54-2.27.845-3.545.845-2.872 0-5.42-1.443-6.95-3.682A6.732 6.732 0 017.625 6.343m10.25 6.45c-2.348-2.348-5.32-3.682-8.4-3.682-1.277 0-2.51.21-3.682.618" /></svg></div>
-                        <div class="p-6">
-                            <h3 class="text-xl font-semibold mb-2">专业比赛篮球</h3>
-                            <p class="text-gray-600 text-sm">采用超纤PU材质，吸湿防滑，提供卓越的抓握感和操控性。符合国际篮联标准，适合室内外高强度比赛。</p>
-                        </div>
-                    </div>
-                    <div class="product-card bg-white rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 animate-on-scroll" style="animation-delay: 0.1s;">
-                        <div class="product-icon-bg"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12.75 3.03v.568c0 .334.148.65.405.864l1.068.89c.442.369.535 1.01.216 1.49l-.51.766a2.25 2.25 0 01-1.161.886l-.143.048a1.109 1.109 0 00-.57 1.664c.369.555.169 1.307-.427 1.605L9 13.125l.423 1.059a.956.956 0 01-1.652.928l-.679-.906a1.125 1.125 0 00-1.906.172L4.5 15.75l-.612.153M12.75 3.031a9 9 0 00-8.862 10.425l1.556 5.27a1.125 1.125 0 002.162-.642l.209-.71-.423-1.059a.956.956 0 011.652-.928l.679.906a1.125 1.125 0 001.906-.172L15.75 11.25l.612-.153M12.75 3.031a9 9 0 018.862 10.425l-1.556 5.27a1.125 1.125 0 01-2.162-.642l-.209-.71.423-1.059a.956.956 0 00-1.652-.928l-.679.906a1.125 1.125 0 01-1.906-.172L9 11.25l-.612-.153" /></svg></div>
-                        <div class="p-6">
-                            <h3 class="text-xl font-semibold mb-2">高弹训练足球</h3>
-                            <p class="text-gray-600 text-sm">5号标准尺寸，机缝工艺，丁基内胆确保气密性。耐磨表皮，为日常训练提供持久稳定的飞行轨迹。</p>
-                        </div>
-                    </div>
-                    <div class="product-card bg-white rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 animate-on-scroll" style="animation-delay: 0.2s;">
-                        <div class="product-icon-bg"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" /></svg></div>
-                        <div class="p-6">
-                            <h3 class="text-xl font-semibold mb-2">碳纤维羽毛球拍</h3>
-                            <p class="text-gray-600 text-sm">全碳素一体成型，轻量化设计，攻守兼备。高磅数承载力，提升击球爆发力，适合进阶型选手。</p>
-                        </div>
-                    </div>
-                    <div class="product-card bg-white rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 animate-on-scroll" style="animation-delay: 0.3s;">
-                        <div class="product-icon-bg"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 9V4.5M9 9H4.5M9 9L3.75 3.75M9 15v4.5M9 15H4.5M9 15l-5.25 5.25M15 9h4.5M15 9V4.5M15 9l5.25-5.25M15 15h4.5M15 15v4.5M15 15l5.25 5.25" /></svg></div>
-                        <div class="p-6">
-                            <h3 class="text-xl font-semibold mb-2">环保TPE瑜伽垫</h3>
-                            <p class="text-gray-600 text-sm">双面防滑纹理，提供绝佳的稳定性。8mm加厚设计，高密度TPE材质，环保无味，提供优秀的回弹和缓冲。</p>
-                        </div>
-                    </div>
-                    <div class="product-card bg-white rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 animate-on-scroll" style="animation-delay: 0.0s;">
-                        <div class="product-icon-bg"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" /></svg></div>
-                        <div class="p-6">
-                            <h3 class="text-xl font-semibold mb-2">速干透气运动服</h3>
-                            <p class="text-gray-600 text-sm">功能性面料，快速排汗，保持身体干爽。支持团队Logo和号码定制，多种颜色可选，打造专属团队形象。</p>
-                        </div>
-                    </div>
-                    <div class="product-card bg-white rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 animate-on-scroll" style="animation-delay: 0.1s;">
-                        <div class="product-icon-bg"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" /></svg></div>
-                        <div class="p-6">
-                            <h3 class="text-xl font-semibold mb-2">专业网球拍</h3>
-                            <p class="text-gray-600 text-sm">碳复合材料，扩大甜区，提高容错率。避震手柄设计，带来舒适击球体验，适合初学者及进阶选手。</p>
-                        </div>
-                    </div>
-                    <div class="product-card bg-white rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 animate-on-scroll" style="animation-delay: 0.2s;">
-                        <div class="product-icon-bg"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15" /></svg></div>
-                        <div class="p-6">
-                            <h3 class="text-xl font-semibold mb-2">六角包胶哑铃</h3>
-                            <p class="text-gray-600 text-sm">实心铸铁内芯，外层环保橡胶包裹，防滑防摔，不伤地板。六角形设计防止滚动，多种重量规格可选。</p>
-                        </div>
-                    </div>
-                    <div class="product-card bg-white rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 animate-on-scroll" style="animation-delay: 0.3s;">
-                        <div class="product-icon-bg"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM18 13.5l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 18l-1.035.259a3.375 3.375 0 00-2.456 2.456L18 21.75l-.259-1.035a3.375 3.375 0 00-2.456-2.456L14.25 18l1.035-.259a3.375 3.375 0 002.456-2.456L18 13.5z" /></svg></div>
-                        <div class="p-6">
-                            <h3 class="text-xl font-semibold mb-2">减震缓冲跑鞋</h3>
-                            <p class="text-gray-600 text-sm">高弹中底材料，提供卓越的能量反馈和减震效果。透气网眼鞋面，轻盈贴合，适合长距离跑步训练。</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+        <!-- 页脚/作者信息 -->
+        <footer class="text-right mt-8 pt-6 border-t border-gray-200">
+            <p class="font-semibold text-gray-800">Haley</p>
+            <p class="text-sm text-gray-600">运营总监</p>
+            <p class="text-sm text-gray-600 mt-2">2025.08.15</p>
+        </footer>
 
-        <!-- Contact Section -->
-        <section id="contact" class="py-20 bg-blue-50">
-            <div class="container mx-auto px-6 animate-on-scroll">
-                <div class="text-center mb-12">
-                    <h2 class="text-4xl font-bold text-gray-800">开启合作</h2>
-                    <p class="text-lg text-gray-600 mt-4 max-w-3xl mx-auto">我们期待与您建立长期合作关系。请通过以下方式直接联系我们，我们的客户代表将尽快与您沟通。</p>
-                </div>
-                <div class="max-w-4xl mx-auto bg-white p-8 sm:p-12 rounded-xl shadow-lg">
-                    <div class="text-center text-gray-700">
-                        <p class="text-lg">请通过以下方式联系我们进行大宗采购：</p>
-                        <p class="mt-4 text-xl sm:text-2xl font-semibold"><strong>邮箱:</strong> purchasing@homesports.com</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <!-- Footer -->
-    <footer class="bg-gray-800 text-white">
-        <div class="container mx-auto px-6 py-12">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-center md:text-left">
-                <div>
-                    <h3 class="text-xl font-bold mb-4">HOME体育</h3>
-                    <p class="text-gray-400">巅峰之选，动力无限。</p>
-                </div>
-                <div>
-                    <h4 class="font-semibold mb-4">快速链接</h4>
-                    <ul>
-                        <li class="mb-2"><a href="#home" class="hover:text-blue-400 transition-colors">首页</a></li>
-                        <li class="mb-2"><a href="#products" class="hover:text-blue-400 transition-colors">产品中心</a></li>
-                        <li class="mb-2"><a href="#about" class="hover:text-blue-400 transition-colors">关于我们</a></li>
-                        <li class="mb-2"><a href="#contact" class="hover:text-blue-400 transition-colors">联系我们</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="mt-8 pt-8 border-t border-gray-700 text-center text-gray-400 text-sm">
-                <p>&copy; 2024 HOME体育. All Rights Reserved.</p>
-            </div>
-        </div>
-    </footer>
-
-    <script>
-        // Smooth scroll for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const targetElement = document.querySelector(this.getAttribute('href'));
-                if(targetElement) {
-                    targetElement.scrollIntoView({
-                        behavior: 'smooth'
-                    });
-                }
-            });
-        });
-
-        // Mobile menu toggle
-        const mobileMenuButton = document.getElementById('mobile-menu-button');
-        const mobileMenu = document.getElementById('mobile-menu');
-        if(mobileMenuButton && mobileMenu) {
-            mobileMenuButton.addEventListener('click', () => {
-                mobileMenu.classList.toggle('hidden');
-            });
-        }
-
-        // Animation on scroll
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('is-visible');
-                    entry.target.style.animationName = 'fadeInUp'; // explicitly set animation name
-                }
-            });
-        }, {
-            threshold: 0.1 // Trigger when 10% of the element is visible
-        });
-
-        const elementsToAnimate = document.querySelectorAll('.animate-on-scroll');
-        elementsToAnimate.forEach(el => observer.observe(el));
-    </script>
+    </div>
 
 </body>
 </html>
