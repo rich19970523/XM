@@ -3,130 +3,696 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>运营团队管理方案建议书合集</title>
-    <!-- 引入Inter字体 -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap">
-    <!-- 引入Tailwind CSS -->
+    <title>增强版可配置的动态排行榜</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f3f4f6;
-            color: #374151;
-            line-height: 1.6;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+        }
+        .modal-enter-active {
+            animation: modal-in 0.2s ease-out forwards;
+        }
+        .modal-leave-active {
+            animation: modal-out 0.2s ease-in forwards;
+        }
+        @keyframes modal-in {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        @keyframes modal-out {
+            from { opacity: 1; transform: scale(1); }
+            to { opacity: 0; transform: scale(0.95); }
         }
     </style>
 </head>
-<body class="p-4 md:p-8">
+<body class="bg-gray-100 text-gray-800">
 
-    <!-- 主容器 -->
-    <div class="max-w-4xl mx-auto bg-white shadow-lg rounded-xl p-6 md:p-10 my-8 border border-gray-200">
-
-        <!-- 总标题 -->
-        <header class="text-center pb-6 mb-6">
-            <h1 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-2">运营团队管理与业务增长方案建议书</h1>
-        </header>
+    <div class="container mx-auto p-4 sm:p-6 lg:p-8">
         
-        <!-- 第一份方案：运营管理优化及业务增长 -->
-        <section class="border-b border-gray-200 pb-6 mb-6">
-            <h2 class="text-xl md:text-2xl font-bold text-gray-900 mb-4">第一部分：构建高效运营管理体系，驱动业务数据稳健增长</h2>
+        <header class="text-center mb-8">
+            <h1 class="text-3xl sm:text-4xl font-bold text-gray-900">增强版可配置的动态排行榜</h1>
+            <p class="text-gray-600 mt-2">数据和配置均保存在您的浏览器中</p>
+        </header>
+
+        <main class="bg-white rounded-2xl shadow-lg p-6 max-w-4xl mx-auto">
             
-            <main class="text-gray-700 leading-relaxed">
-                <p class="mb-6">为响应公司战略目标，提升运营团队的整体效能和业务产出，我基于当前团队工作现状，结合科学管理方法论，特制定此份运营管理优化方案。本方案旨在将团队工作从<strong class="font-bold text-gray-900">“执行驱动”升级为“数据驱动与增长驱动”</strong>，以确保运营工作能更高效、更精准地支撑公司业务发展。</p>
-                
-                <h3 class="text-xl font-bold text-gray-900 mt-8 mb-4 border-l-4 border-blue-500 pl-4">一、 方案核心价值：解决痛点，驱动增长</h3>
-                <p class="mb-4">当前，运营团队面临的核心挑战在于：</p>
-                <ul class="list-disc list-inside space-y-2 mb-6 ml-4">
-                    <li><strong class="font-semibold text-gray-900">效率瓶颈：</strong>缺乏标准化流程，导致跨部门沟通成本高，返工率居高不下。</li>
-                    <li><strong class="font-semibold text-gray-900">目标模糊：</strong>日常工作与公司战略目标关联度不强，团队工作量大但方向感不足。</li>
-                    <li><strong class="font-semibold text-gray-900">能力提升：</strong>团队缺乏系统性培养和知识沉淀机制，个人能力提升缓慢。</li>
-                </ul>
-                <p class="mb-4">本方案旨在通过以下三大核心举措，根本性解决上述问题：</p>
-                <ul class="list-disc list-inside space-y-2 mb-6 ml-4">
-                    <li><strong class="font-semibold text-gray-900">流程化管理：</strong>通过构建标准操作流程（SOP），将高频工作标准化、自动化，大幅提升工作效率。</li>
-                    <li><strong class="font-semibold text-gray-900">数据化决策：</strong>建立以KPI为核心的目标管理体系，所有工作都将与可量化的业务指标挂钩，确保每一份投入都产生可衡量的回报。</li>
-                    <li><strong class="font-semibold text-gray-900">系统化培养：</strong>建立知识沉淀与人才培养机制，将个人经验转化为团队资产，构建学习型组织。</li>
-                </ul>
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-semibold">排行榜列表</h2>
+                <div>
+                    <button id="config-btn" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-lg shadow-md transition-transform transform hover:scale-105 mr-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-2" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M5 4a1 1 0 00-2 0v6a1 1 0 002 0V4zM11 4a1 1 0 00-2 0v10a1 1 0 002 0V4zM17 8a1 1 0 00-2 0v2a1 1 0 002 0V8z" />
+                        </svg>
+                        配置表格
+                    </button>
+                    <button id="add-new-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow-md transition-transform transform hover:scale-105">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-2" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
+                        </svg>
+                        添加新成员
+                    </button>
+                </div>
+            </div>
 
-                <h3 class="text-xl font-bold text-gray-900 mt-8 mb-4 border-l-4 border-blue-500 pl-4">二、 核心举措与具体执行方案</h3>
-                <p class="mb-4">我计划分阶段、有步骤地落地以下关键举措：</p>
-                
-                <h4 class="text-lg font-semibold text-gray-900 mt-6 mb-2">1. 建立敏捷高效的工作流</h4>
-                <ul class="list-disc list-inside space-y-2 mb-6 ml-4">
-                    <li><strong class="font-semibold text-gray-900">周一启动会（15分钟）：</strong>替代冗长会议，聚焦本周北极星指标，快速同步任务与责任人，确保全员目标对齐。</li>
-                    <li><strong class="font-semibold text-gray-900">周五复盘会（45-60分钟）：</strong>以数据分析为驱动，深入剖析本周成果与问题。关键在于“归因分析”，旨在沉淀成功经验，避免重复犯错。</li>
-                    <li><strong class="font-semibold text-gray-900">日报/周报体系：</strong>采用全新模板，日报聚焦<strong class="font-bold text-gray-900">“进度与风险”</strong>，周报聚焦<strong class="font-bold text-gray-900">“成果与洞察”</strong>，让汇报更精炼、更有价值。</li>
-                </ul>
-
-                <h4 class="text-lg font-semibold text-gray-900 mt-6 mb-2">2. 引入标准化管理工具与流程</h4>
-                <ul class="list-disc list-inside space-y-2 mb-6 ml-4">
-                    <li><strong class="font-semibold text-gray-900">项目管理工具（如JIRA）：</strong>所有任务将通过看板进行分配、追踪与管理，实现信息透明，降低口头沟通成本。</li>
-                    <li><strong class="font-semibold text-gray-900">Bug处理SOP：</strong>针对技术对接这一高频场景，制定标准化流程。明确提报信息、处理时效与跟进机制，以确保问题能被快速、准确地解决，显著减少团队内耗。</li>
-                </ul>
-
-                <h4 class="text-lg font-semibold text-gray-900 mt-6 mb-2">3. KPI量化管理与激励机制</h4>
-                <p class="mb-4">为确保团队目标的清晰性与执行力，我将引入一套完整的<strong class="font-bold text-gray-900">KPI（关键绩效指标）</strong>管理体系，将其与日常工作和绩效评估紧密结合。</p>
-                
-                <p class="mb-6">通过这套KPI管理体系，我们将确保每一位团队成员都清楚自己的工作目标和价值所在，形成<strong class="font-bold text-gray-900">“目标→行动→数据→复盘”</strong>的良性循环，真正实现业务的内生增长。</p>
-                
-                <h3 class="text-xl font-bold text-gray-900 mt-8 mb-4 border-l-4 border-blue-500 pl-4">三、 预期效果与回报</h3>
-                <p class="mb-4">通过本方案的实施，我预估将在以下方面取得显著成效：</p>
-                <ul class="list-disc list-inside space-y-2 mb-6 ml-4">
-                    <li><strong class="font-semibold text-gray-900">运营效率提升20%以上：</strong>流程的标准化和工具的引入，将大幅减少沟通与返工时间，释放团队更多精力投入到创新和增长上。</li>
-                    <li><strong class="font-semibold text-gray-900">关键业务指标稳健增长：</strong>数据驱动的决策将使运营策略更精准，预计关键业务指标（如月活、转化率）将实现稳定增长。</li>
-                    <li><strong class="font-semibold text-gray-900">团队能力系统性增强：</strong>知识沉淀和内部培训机制将使团队成员的专业技能得到快速提升，为公司储备更多核心人才。</li>
-                </ul>
-                <p class="mb-6">本方案旨在从根本上改变我们的工作方式，将运营团队打造成一个具有强大执行力、数据分析能力和创新精神的增长引擎。我坚信，在您的支持下，我们能够顺利完成转型，为公司的长期发展贡献更大的价值。</p>
-            </main>
-        </section>
-
-        <!-- 第二份方案：强化团队纪律与绩效管理 -->
-        <section class="mt-8 pt-6">
-            <h2 class="text-xl md:text-2xl font-bold text-gray-900 mb-4">第二部分：通过构建严谨管理体系，驱动运营团队实现业绩飞跃</h2>
-
-            <main class="text-gray-700 leading-relaxed">
-                <p class="mb-6">在当前竞争激烈的市场环境中，团队执行力与运营效能已成为业务持续增长的核心驱动力。通过对运营团队的深入观察，我发现尽管团队成员工作投入度高，但在执行细节、纪律意识与绩效量化管理方面仍存在进一步优化的空间。为全面解决这些潜在问题，我特此提交一份关于<strong class="font-bold text-gray-900">强化团队纪律与绩效管理</strong>的方案建议。本方案旨在通过构建一套严谨、系统的管理体系，将运营团队重塑为一支纪律严明、高效执行、结果导向的精锐之师。</p>
-
-                <h3 class="text-xl font-bold text-gray-900 mt-8 mb-4 border-l-4 border-blue-500 pl-4">一、 核心理念：以纪律为基石，以绩效为导向</h3>
-                <p class="mb-4">我们深信，卓越的成果源于严谨的纪律与清晰的责任。当规则缺失或执行不力时，将导致内部摩擦、效率损耗，并最终偏离业务目标。因此，本方案的核心在于：</p>
-                <ul class="list-disc list-inside space-y-2 mb-6 ml-4">
-                    <li><strong class="font-semibold text-gray-900">消除内耗：</strong> 建立统一的行为规范，减少因个人因素导致的协作障碍和效率损失。</li>
-                    <li><strong class="font-semibold text-gray-900">强化责任：</strong> 将日常行为纪律与业务绩效紧密挂钩，确保每位成员的付出都直接贡献于团队目标。</li>
-                    <li><strong class="font-semibold text-gray-900">提升人效：</strong> 释放团队潜能，使每一位成员能够在有序可控的环境中，专注于创造更高价值。</li>
-                </ul>
-                
-                <h3 class="text-xl font-bold text-gray-900 mt-8 mb-4 border-l-4 border-blue-500 pl-4">二、 具体执行方案：纪律管理与绩效考核双轮驱动</h3>
-                <p class="mb-4">为将上述理念付诸实践，我已起草一份详细的《办公室管理办法与员工行为规范》，计划作为团队日常管理的指导准则。该文件不仅涵盖了考勤、办公行为等基础纪律，更将KPI奖惩规则量化、透明化，确保奖罚分明、公平公正。</p>
-                <p class="mb-4">本方案将重点落实以下措施：</p>
-                <ul class="list-disc list-inside space-y-2 mb-6 ml-4">
-                    <li><strong class="font-semibold text-gray-900">严谨的纪律管理：</strong> 针对迟到、旷工、工作期间非工作行为等，设定明确的处罚机制，旨在培养团队的职业精神和专业素养。</li>
-                    <li><strong class="font-semibold text-gray-900">量化的KPI奖惩体系：</strong> 将员工的薪酬与核心业务指标（KPI）直接关联，并设定明确的达成率与对应的奖惩规则。</li>
-                    <li><strong class="font-semibold text-gray-900">双重评估：</strong> 将日常行为规范与业务绩效结果相结合，构建一套完整的员工综合评估体系，确保团队既具备高效产出能力，又拥有专业的职业操守。</li>
-                </ul>
-
-                <h3 class="text-xl font-bold text-gray-900 mt-8 mb-4 border-l-4 border-blue-500 pl-4">三、 预期回报与风险控制</h3>
-                <p class="mb-4">通过实施这套严谨的管理体系，我们预期将为公司带来以下显著回报：</p>
-                <ul class="list-disc list-inside space-y-2 mb-6 ml-4">
-                    <li><strong class="font-semibold text-gray-900">团队效能提升：</strong> 纪律的强化将有效减少非生产性时间，预计团队整体效能将提升 <strong class="font-bold text-gray-900">[具体百分比，例如15%-20%]</strong>。</li>
-                    <li><strong class="font-semibold text-gray-900">业绩稳步增长：</strong> KPI的严格执行将确保团队工作始终聚焦于关键业务指标，有效推动业绩持续增长。</li>
-                    <li><strong class="font-semibold text-gray-900">人才结构优化：</strong> 本制度将筛选出真正具备高执行力、高产出能力的优秀人才，形成积极向上、优胜劣汰的良性循环。</li>
-                </ul>
-                <p class="mb-6">在推行过程中，我将确保制度的公正性和透明度，并与团队成员进行充分沟通，解释其背后的逻辑与价值，以争取全员的理解和支持。</p>
-
-                <h3 class="text-xl font-bold text-gray-900 mt-8 mb-4 border-l-4 border-blue-500 pl-4">四、 总结与展望</h3>
-                <p class="mb-4">一个卓越的团队，离不开强大的执行力和明确的规则。本方案正是基于这一核心理念，旨在为运营团队提供一个更高效、更有序的工作框架。</p>
-                <p class="mb-6">我已做好充分准备，将以身作则，确保方案的顺利推行。我坚信，在您的支持下，我们将能够打造一支能打硬仗、善打胜仗的精英团队，为公司的长远发展贡献核心力量。</p>
-            </main>
-        </section>
-
-        <!-- 页脚/作者信息 -->
-        <footer class="text-right mt-8 pt-6 border-t border-gray-200">
-            <p class="font-semibold text-gray-800">Haley</p>
-            <p class="text-sm text-gray-600">运营总监</p>
-            <p class="text-sm text-gray-600 mt-2">2025.08.15</p>
-        </footer>
-
+            <div class="overflow-x-auto">
+                <table class="w-full text-left table-auto">
+                    <thead id="leaderboard-head">
+                        <!-- 表头将在这里动态生成 -->
+                    </thead>
+                    <tbody id="leaderboard-body" class="text-gray-700 text-sm font-light">
+                        <!-- 表格内容将在这里动态生成 -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <div id="empty-state" class="text-center py-12 text-gray-500 hidden">
+                <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                <p class="mt-4 text-lg">排行榜是空的</p>
+                <p class="mt-1">点击 "添加新成员" 来创建第一条记录吧！</p>
+            </div>
+        </main>
     </div>
 
+    <!-- 添加/编辑 模态框 -->
+    <div id="modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 hidden">
+        <div id="modal-content" class="bg-white rounded-2xl shadow-xl w-full max-w-md p-8">
+            <h2 id="modal-title" class="text-2xl font-bold mb-6 text-center">添加新成员</h2>
+            <form id="entry-form">
+                <input type="hidden" id="entry-id">
+                <!-- 动态表单字段将在这里插入 -->
+                <div id="dynamic-form-fields" class="mb-6"></div>
+                <div class="flex items-center justify-between mt-8">
+                    <button type="button" id="cancel-btn" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-lg transition-colors">取消</button>
+                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow-md transition-colors">保存</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- 删除确认 模态框 (保持不变) -->
+    <div id="delete-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 hidden">
+        <div id="delete-modal-content" class="bg-white rounded-2xl shadow-xl w-full max-w-sm p-8">
+            <h2 class="text-xl font-bold mb-4 text-center">确认删除</h2>
+            <p class="text-gray-600 text-center mb-6">您确定要删除这条记录吗？此操作无法撤销。</p>
+            <div class="flex justify-center space-x-4">
+                <button id="cancel-delete-btn" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-6 rounded-lg transition-colors">取消</button>
+                <button id="confirm-delete-btn" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-lg shadow-md transition-colors">删除</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 新增：配置模态框 -->
+    <div id="config-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 hidden">
+        <div id="config-modal-content" class="bg-white rounded-2xl shadow-xl w-full max-w-2xl p-8 max-h-[80vh] overflow-y-auto">
+            <h2 class="text-2xl font-bold mb-6 text-center">配置排行榜表格</h2>
+            <form id="config-form">
+                <div id="columns-container" class="space-y-4 mb-6">
+                    <!-- 动态生成的列配置表单项将在这里插入 -->
+                </div>
+                <button type="button" id="add-column-btn" class="w-full bg-gray-100 hover:bg-gray-200 text-gray-600 font-bold py-3 px-4 rounded-lg border-2 border-dashed border-gray-300 transition-colors">
+                    + 新增列
+                </button>
+                <div class="flex items-center justify-between mt-8">
+                    <button type="button" id="cancel-config-btn" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-lg transition-colors">取消</button>
+                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow-md transition-colors">保存配置</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- DOM 元素获取 ---
+            const addNewBtn = document.getElementById('add-new-btn');
+            const configBtn = document.getElementById('config-btn');
+            const leaderboardHead = document.getElementById('leaderboard-head');
+            const leaderboardBody = document.getElementById('leaderboard-body');
+            const emptyState = document.getElementById('empty-state');
+            
+            // 编辑/新增模态框元素
+            const modal = document.getElementById('modal');
+            const modalContent = document.getElementById('modal-content');
+            const cancelBtn = document.getElementById('cancel-btn');
+            const entryForm = document.getElementById('entry-form');
+            const modalTitle = document.getElementById('modal-title');
+            const entryIdInput = document.getElementById('entry-id');
+            // 新增：动态表单字段的容器
+            const dynamicFormFields = document.getElementById('dynamic-form-fields');
+
+            // 删除确认模态框元素
+            const deleteModal = document.getElementById('delete-modal');
+            const deleteModalContent = document.getElementById('delete-modal-content');
+            const cancelDeleteBtn = document.getElementById('cancel-delete-btn');
+            const confirmDeleteBtn = document.getElementById('confirm-delete-btn');
+            
+            // 配置模态框元素
+            const configModal = document.getElementById('config-modal');
+            const configModalContent = document.getElementById('config-modal-content');
+            const configForm = document.getElementById('config-form');
+            const columnsContainer = document.getElementById('columns-container');
+            const addColumnBtn = document.getElementById('add-column-btn');
+            const cancelConfigBtn = document.getElementById('cancel-config-btn');
+
+            // --- 数据存储键 ---
+            const STORAGE_KEY_DATA = 'leaderboardData';
+            const STORAGE_KEY_CONFIG = 'leaderboardConfig';
+
+            // --- 应用状态 ---
+            let leaderboardData = [];
+            let tableConfig = { columns: [] };
+            let entryIdToDelete = null;
+
+            // --- 默认配置 ---
+            const defaultConfig = {
+                columns: [
+                    {
+                        key: 'rank',
+                        header: '排名',
+                        headerClass: 'py-3 px-6 text-center',
+                        cellClass: 'py-3 px-6 text-center',
+                        render: (entry, index) => {
+                            const rank = index + 1;
+                            let rankClass = 'text-gray-600';
+                            if (rank === 1) rankClass = 'text-yellow-500 font-bold';
+                            if (rank === 2) rankClass = 'text-gray-500 font-bold';
+                            if (rank === 3) rankClass = 'text-orange-700 font-bold';
+                            return `<span class="text-lg ${rankClass}">${rank}</span>`;
+                        }
+                    },
+                    { key: 'name', header: '名称', type: 'string', headerClass: 'py-3 px-6', cellClass: 'py-3 px-6 font-medium text-gray-800' },
+                    { key: 'score', header: '分数', type: 'number', headerClass: 'py-3 px-6 text-center', cellClass: 'py-3 px-6 text-center font-semibold text-blue-600' },
+                    { key: 'isPro', header: '专业版用户', type: 'boolean', headerClass: 'py-3 px-6 text-center', cellClass: 'py-3 px-6 text-center' },
+                    { key: 'joinDate', header: '加入日期', type: 'date', headerClass: 'py-3 px-6 text-center', cellClass: 'py-3 px-6 text-center' },
+                    {
+                        key: 'actions',
+                        header: '操作',
+                        headerClass: 'py-3 px-6 text-center',
+                        cellClass: 'py-3 px-6 text-center',
+                        render: (entry) => `
+                            <div class="flex item-center justify-center space-x-2">
+                                <button data-id="${entry.id}" class="edit-btn w-8 h-8 flex items-center justify-center bg-green-200 text-green-700 rounded-full hover:bg-green-300 transition-colors" title="编辑">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 pointer-events-none" viewBox="0 0 20 20" fill="currentColor"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" /><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" /></svg>
+                                </button>
+                                <button data-id="${entry.id}" class="delete-btn w-8 h-8 flex items-center justify-center bg-red-200 text-red-700 rounded-full hover:bg-red-300 transition-colors" title="删除">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 pointer-events-none" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm4 0a1 1 0 012 0v6a1 1 0 11-2 0V8z" clip-rule="evenodd" /></svg>
+                                </button>
+                            </div>
+                        `
+                    }
+                ]
+            };
+
+            // --- 核心函数 ---
+
+            /**
+             * 从 localStorage 加载排行榜数据
+             */
+            const loadData = () => {
+                const data = localStorage.getItem(STORAGE_KEY_DATA);
+                leaderboardData = data ? JSON.parse(data) : [
+                    { id: Date.now(), name: 'Alice', score: 98, isPro: true, joinDate: '2023-10-27T10:00:00Z' },
+                    { id: Date.now() + 1, name: 'Bob', score: 85, isPro: false, joinDate: '2023-09-15T12:00:00Z' },
+                    { id: Date.now() + 2, name: 'Charlie', score: 102, isPro: true, joinDate: '2023-11-01T15:30:00Z' },
+                ];
+            };
+
+            /**
+             * 将排行榜数据保存到 localStorage
+             */
+            const saveData = () => {
+                localStorage.setItem(STORAGE_KEY_DATA, JSON.stringify(leaderboardData));
+            };
+
+            /**
+             * 从 localStorage 加载表格配置
+             */
+            const loadConfig = () => {
+                const config = localStorage.getItem(STORAGE_KEY_CONFIG);
+                // 确保 rank 和 actions 列始终存在，不被用户删除
+                const fixedColumns = defaultConfig.columns.filter(c => ['rank', 'actions'].includes(c.key));
+                const userColumns = config ? JSON.parse(config) : [];
+                // 过滤掉用户配置中与固定列重名的，并将固定列添加到最前和最后
+                tableConfig.columns = [
+                    ...fixedColumns.filter(c => c.key === 'rank'),
+                    ...userColumns.filter(uc => !['rank', 'actions'].includes(uc.key)),
+                    ...fixedColumns.filter(c => c.key === 'actions')
+                ];
+                // 如果用户没有配置，则使用默认的 name 和 score
+                if (userColumns.length === 0) {
+                     tableConfig.columns = defaultConfig.columns;
+                }
+            };
+            
+            /**
+             * 将表格配置保存到 localStorage
+             */
+            const saveConfig = () => {
+                // 只保存用户可修改的列，即过滤掉 rank 和 actions
+                const userConfigurableColumns = tableConfig.columns.filter(c => !['rank', 'actions'].includes(c.key));
+                localStorage.setItem(STORAGE_KEY_CONFIG, JSON.stringify(userConfigurableColumns));
+            };
+
+
+            /**
+             * 核心渲染函数，根据配置动态生成表格
+             */
+            const renderLeaderboard = () => {
+                leaderboardHead.innerHTML = '';
+                leaderboardBody.innerHTML = '';
+
+                // 渲染表头
+                const headerRow = document.createElement('tr');
+                headerRow.className = 'bg-gray-200 text-gray-600 uppercase text-sm leading-normal';
+                tableConfig.columns.forEach(col => {
+                    const th = document.createElement('th');
+                    th.className = col.headerClass || '';
+                    th.textContent = col.header;
+                    headerRow.appendChild(th);
+                });
+                leaderboardHead.appendChild(headerRow);
+
+                if (leaderboardData.length === 0) {
+                    emptyState.classList.remove('hidden');
+                    return;
+                }
+                emptyState.classList.add('hidden');
+
+                const sortedData = [...leaderboardData].sort((a, b) => b.score - a.score);
+                sortedData.forEach((entry, index) => {
+                    const row = document.createElement('tr');
+                    row.className = 'border-b border-gray-200 hover:bg-gray-100';
+                    tableConfig.columns.forEach(col => {
+                        const cell = document.createElement('td');
+                        cell.className = col.cellClass || '';
+
+                        // 渲染逻辑：优先使用自定义 render 函数
+                        if (col.render) {
+                            cell.innerHTML = col.render(entry, index);
+                        } else {
+                            // 其次根据 type 字段进行类型化渲染
+                            const value = entry[col.key];
+                            switch (col.type) {
+                                case 'number':
+                                    cell.textContent = value !== undefined ? `￥${value}` : '';
+                                    break;
+                                case 'boolean':
+                                    cell.innerHTML = value ? '✅' : '❌';
+                                    break;
+                                case 'date':
+                                    try {
+                                        if (value) {
+                                            const date = new Date(value);
+                                            cell.textContent = date.toLocaleDateString('zh-CN', {
+                                                year: 'numeric',
+                                                month: 'long',
+                                                day: 'numeric'
+                                            });
+                                        } else {
+                                            cell.textContent = '';
+                                        }
+                                    } catch (e) {
+                                        cell.textContent = '无效日期';
+                                    }
+                                    break;
+                                case 'string':
+                                default:
+                                    cell.textContent = value !== undefined ? value : '';
+                                    break;
+                            }
+                        }
+                        row.appendChild(cell);
+                    });
+                    leaderboardBody.appendChild(row);
+                });
+
+                attachActionListeners();
+            };
+
+            const attachActionListeners = () => {
+                document.querySelectorAll('.edit-btn').forEach(btn => btn.addEventListener('click', handleEdit));
+                document.querySelectorAll('.delete-btn').forEach(btn => btn.addEventListener('click', handleDelete));
+            };
+
+            // --- 模态框管理 ---
+
+            /**
+             * 动态渲染并显示模态框
+             * @param {object|null} entry - 要编辑的数据对象，新增时为 null
+             */
+            const showModal = (entry = null) => {
+                // 重置表单并清空动态字段容器
+                entryForm.reset();
+                dynamicFormFields.innerHTML = '';
+                
+                // 设置模态框标题和要编辑的成员ID
+                if (entry) {
+                    modalTitle.textContent = '编辑成员信息';
+                    entryIdInput.value = entry.id;
+                } else {
+                    modalTitle.textContent = '添加新成员';
+                    entryIdInput.value = '';
+                }
+
+                // 遍历列配置，动态生成表单字段
+                tableConfig.columns.forEach(col => {
+                    // 只为可编辑的列生成表单字段
+                    if (col.key !== 'rank' && col.key !== 'actions') {
+                        const formFieldDiv = document.createElement('div');
+                        formFieldDiv.className = 'mb-4';
+
+                        const label = document.createElement('label');
+                        label.htmlFor = col.key;
+                        label.className = 'block text-gray-700 text-sm font-bold mb-2';
+                        label.textContent = col.header + ':';
+                        formFieldDiv.appendChild(label);
+
+                        let inputElement;
+
+                        // 根据数据类型创建不同的输入元素
+                        switch (col.type) {
+                            case 'number':
+                                inputElement = document.createElement('input');
+                                inputElement.type = 'number';
+                                inputElement.required = true;
+                                if (entry) inputElement.value = entry[col.key] || '';
+                                break;
+                            case 'boolean':
+                                inputElement = document.createElement('input');
+                                inputElement.type = 'checkbox';
+                                inputElement.className = 'form-checkbox h-5 w-5 text-blue-600 rounded-md';
+                                if (entry && entry[col.key]) inputElement.checked = true;
+                                break;
+                            case 'date':
+                                inputElement = document.createElement('input');
+                                inputElement.type = 'date';
+                                inputElement.required = true;
+                                // 日期格式化为 YYYY-MM-DD
+                                if (entry && entry[col.key]) {
+                                    const dateObj = new Date(entry[col.key]);
+                                    const formattedDate = dateObj.toISOString().split('T')[0];
+                                    inputElement.value = formattedDate;
+                                }
+                                break;
+                            case 'string':
+                            default:
+                                inputElement = document.createElement('input');
+                                inputElement.type = 'text';
+                                inputElement.required = true;
+                                if (entry) inputElement.value = entry[col.key] || '';
+                                break;
+                        }
+
+                        // 为所有输入元素添加通用属性
+                        if (col.type !== 'boolean') {
+                            inputElement.className = 'shadow-sm appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500';
+                        }
+                        inputElement.id = col.key;
+                        inputElement.name = col.key;
+                        inputElement.placeholder = `请输入${col.header}`;
+                        
+                        formFieldDiv.appendChild(inputElement);
+                        dynamicFormFields.appendChild(formFieldDiv);
+                    }
+                });
+                
+                modal.classList.remove('hidden');
+                modalContent.classList.add('modal-enter-active');
+                modalContent.classList.remove('modal-leave-active');
+            };
+
+            const hideModal = () => {
+                modalContent.classList.add('modal-leave-active');
+                modalContent.classList.remove('modal-enter-active');
+                setTimeout(() => modal.classList.add('hidden'), 200);
+            };
+            
+            const showDeleteModal = (id) => {
+                entryIdToDelete = id;
+                deleteModal.classList.remove('hidden');
+                deleteModalContent.classList.add('modal-enter-active');
+                deleteModalContent.classList.remove('modal-leave-active');
+            };
+
+            const hideDeleteModal = () => {
+                deleteModalContent.classList.add('modal-leave-active');
+                deleteModalContent.classList.remove('modal-enter-active');
+                setTimeout(() => {
+                    deleteModal.classList.add('hidden');
+                    entryIdToDelete = null;
+                }, 200);
+            };
+
+            /**
+             * 新增：显示配置模态框
+             */
+            const showConfigModal = () => {
+                renderConfigForm();
+                configModal.classList.remove('hidden');
+                configModalContent.classList.add('modal-enter-active');
+                configModalContent.classList.remove('modal-leave-active');
+            };
+
+            /**
+             * 新增：隐藏配置模态框
+             */
+            const hideConfigModal = () => {
+                configModalContent.classList.add('modal-leave-active');
+                configModalContent.classList.remove('modal-enter-active');
+                setTimeout(() => configModal.classList.add('hidden'), 200);
+            };
+
+            /**
+             * 新增：动态渲染配置表单
+             */
+            const renderConfigForm = () => {
+                columnsContainer.innerHTML = '';
+                // 过滤掉不可配置的列 (rank 和 actions)
+                const configurableColumns = tableConfig.columns.filter(c => !['rank', 'actions'].includes(c.key));
+
+                configurableColumns.forEach((col, index) => {
+                    const columnHtml = `
+                        <div class="border border-gray-200 p-4 rounded-lg bg-gray-50 relative">
+                            <h3 class="text-sm font-semibold text-gray-700 mb-2">列 ${index + 1}</h3>
+                            <button type="button" class="remove-column-btn absolute top-2 right-2 text-red-500 hover:text-red-700">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm4 0a1 1 0 012 0v6a1 1 0 11-2 0V8z" clip-rule="evenodd" /></svg>
+                            </button>
+                            <div class="mb-2">
+                                <label class="block text-gray-600 text-sm mb-1">列名 (Header):</label>
+                                <input type="text" data-key="header" value="${col.header || ''}" class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div class="mb-2">
+                                <label class="block text-gray-600 text-sm mb-1">数据键 (Key):</label>
+                                <input type="text" data-key="key" value="${col.key || ''}" class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-gray-600 text-sm mb-1">数据类型 (Type):</label>
+                                <select data-key="type" class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <option value="string" ${col.type === 'string' ? 'selected' : ''}>文本 (string)</option>
+                                    <option value="number" ${col.type === 'number' ? 'selected' : ''}>数字 (number)</option>
+                                    <option value="boolean" ${col.type === 'boolean' ? 'selected' : ''}>布尔值 (boolean)</option>
+                                    <option value="date" ${col.type === 'date' ? 'selected' : ''}>日期 (date)</option>
+                                </select>
+                            </div>
+                        </div>
+                    `;
+                    columnsContainer.insertAdjacentHTML('beforeend', columnHtml);
+                });
+
+                // 为新渲染的删除按钮绑定事件
+                document.querySelectorAll('.remove-column-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        // 移除父级 div
+                        e.target.closest('.border').remove();
+                    });
+                });
+            };
+
+            // --- 事件处理函数 ---
+
+            /**
+             * 处理动态表单提交
+             */
+            const handleFormSubmit = (e) => {
+                e.preventDefault();
+
+                const id = entryIdInput.value;
+                const newEntry = {};
+                
+                // 遍历动态生成的表单字段，收集数据
+                dynamicFormFields.querySelectorAll('input, select').forEach(input => {
+                    const key = input.id;
+                    let value;
+
+                    // 根据输入类型处理值
+                    switch (input.type) {
+                        case 'number':
+                            value = parseInt(input.value, 10);
+                            break;
+                        case 'checkbox':
+                            value = input.checked;
+                            break;
+                        case 'date':
+                            value = new Date(input.value).toISOString();
+                            break;
+                        default:
+                            value = input.value;
+                            break;
+                    }
+
+                    newEntry[key] = value;
+                });
+                
+                // 验证必填字段（这里只验证'name'和'score'作为示例）
+                if (!newEntry.name || isNaN(newEntry.score)) {
+                    // 如果字段缺失，可以添加更友好的提示
+                    console.error('名称或分数缺失');
+                    return;
+                }
+                
+                // 处理新增或编辑逻辑
+                if (id) {
+                    const index = leaderboardData.findIndex(item => item.id == id);
+                    if (index !== -1) {
+                        // 合并旧数据和新数据，防止遗漏未显示的字段
+                        leaderboardData[index] = { ...leaderboardData[index], ...newEntry };
+                    }
+                } else {
+                    // 为新成员添加唯一ID
+                    newEntry.id = Date.now();
+                    leaderboardData.push(newEntry);
+                }
+
+                saveData();
+                renderLeaderboard();
+                hideModal();
+            };
+
+            const handleEdit = (e) => {
+                const id = e.currentTarget.dataset.id;
+                const entry = leaderboardData.find(item => item.id == id);
+                if (entry) showModal(entry);
+            };
+
+            const handleDelete = (e) => {
+                const id = e.currentTarget.dataset.id;
+                showDeleteModal(id);
+            };
+            
+            const confirmDelete = () => {
+                if (entryIdToDelete) {
+                    leaderboardData = leaderboardData.filter(item => item.id != entryIdToDelete);
+                    saveData();
+                    renderLeaderboard();
+                }
+                hideDeleteModal();
+            };
+            
+            /**
+             * 处理配置表单提交
+             */
+            const handleConfigSubmit = (e) => {
+                e.preventDefault();
+                const newColumns = [];
+                // 遍历动态生成的表单项，构建新的 columns 数组
+                columnsContainer.querySelectorAll('.border').forEach(div => {
+                    const headerInput = div.querySelector('input[data-key="header"]');
+                    const keyInput = div.querySelector('input[data-key="key"]');
+                    const typeSelect = div.querySelector('select[data-key="type"]');
+
+                    // 增强健壮性：增加空值检查，如果找不到元素则跳过
+                    if (headerInput && keyInput && typeSelect) {
+                        const header = headerInput.value;
+                        const key = keyInput.value;
+                        const type = typeSelect.value;
+                        
+                        // 忽略空字段
+                        if (header && key) {
+                            newColumns.push({
+                                header: header,
+                                key: key,
+                                type: type, // 存储新类型
+                                headerClass: 'py-3 px-6',
+                                cellClass: 'py-3 px-6'
+                            });
+                        }
+                    }
+                });
+
+                // 将固定列和新配置的列合并
+                const fixedColumns = defaultConfig.columns.filter(c => ['rank', 'actions'].includes(c.key));
+                tableConfig.columns = [
+                    ...fixedColumns.filter(c => c.key === 'rank'),
+                    ...newColumns,
+                    ...fixedColumns.filter(c => c.key === 'actions')
+                ];
+
+                saveConfig(); // 保存新配置
+                renderLeaderboard(); // 重新渲染表格
+                hideConfigModal(); // 隐藏模态框
+            };
+
+            // --- 事件监听器绑定 ---
+            addNewBtn.addEventListener('click', () => showModal());
+            cancelBtn.addEventListener('click', hideModal);
+            modal.addEventListener('click', e => e.target === modal && hideModal());
+            entryForm.addEventListener('submit', handleFormSubmit);
+            
+            // 删除模态框事件
+            cancelDeleteBtn.addEventListener('click', hideDeleteModal);
+            deleteModal.addEventListener('click', e => e.target === deleteModal && hideDeleteModal());
+            confirmDeleteBtn.addEventListener('click', confirmDelete);
+            
+            // 配置模态框事件
+            configBtn.addEventListener('click', showConfigModal);
+            cancelConfigBtn.addEventListener('click', hideConfigModal);
+            configModal.addEventListener('click', e => e.target === configModal && hideConfigModal());
+            configForm.addEventListener('submit', handleConfigSubmit);
+            
+            // 添加新列按钮事件
+            addColumnBtn.addEventListener('click', () => {
+                const newColumnHtml = `
+                    <div class="border border-gray-200 p-4 rounded-lg bg-gray-50 relative">
+                        <h3 class="text-sm font-semibold text-gray-700 mb-2">新增列</h3>
+                        <button type="button" class="remove-column-btn absolute top-2 right-2 text-red-500 hover:text-red-700">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm4 0a1 1 0 012 0v6a1 1 0 11-2 0V8z" clip-rule="evenodd" /></svg>
+                        </button>
+                        <div class="mb-2">
+                            <label class="block text-gray-600 text-sm mb-1">列名 (Header):</label>
+                            <input type="text" data-key="header" class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div class="mb-2">
+                            <label class="block text-gray-600 text-sm mb-1">数据键 (Key):</label>
+                            <input type="text" data-key="key" class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-gray-600 text-sm mb-1">数据类型 (Type):</label>
+                            <select data-key="type" class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <option value="string">文本 (string)</option>
+                                <option value="number">数字 (number)</option>
+                                <option value="boolean">布尔值 (boolean)</option>
+                                <option value="date">日期 (date)</option>
+                            </select>
+                        </div>
+                    </div>
+                `;
+                columnsContainer.insertAdjacentHTML('beforeend', newColumnHtml);
+                // 再次为新生成的按钮绑定事件
+                columnsContainer.lastElementChild.querySelector('.remove-column-btn').addEventListener('click', (e) => {
+                    e.target.closest('.border').remove();
+                });
+            });
+
+            // --- 初始化 ---
+            const init = () => {
+                loadData();
+                loadConfig(); // 先加载配置
+                renderLeaderboard(); // 再根据配置渲染表格
+            };
+
+            init();
+        });
+    </script>
 </body>
 </html>
