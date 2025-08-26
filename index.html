@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>推广排行榜</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
@@ -36,9 +39,9 @@
 
         <main class="bg-white rounded-2xl shadow-lg p-6 max-w-4xl mx-auto">
             
-            <div class="flex justify-between items-center mb-6">
+            <div class="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
                 <h2 class="text-xl font-semibold">排行榜列表</h2>
-                <div>
+                <div class="flex-shrink-0">
                     <button id="config-btn" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-lg shadow-md transition-transform transform hover:scale-105 mr-2">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-2" viewBox="0 0 20 20" fill="currentColor">
                             <path d="M5 4a1 1 0 00-2 0v6a1 1 0 002 0V4zM11 4a1 1 0 00-2 0v10a1 1 0 002 0V4zM17 8a1 1 0 00-2 0v2a1 1 0 002 0V8z" />
@@ -81,7 +84,6 @@
             <h2 id="modal-title" class="text-2xl font-bold mb-6 text-center">添加新成员</h2>
             <form id="entry-form">
                 <input type="hidden" id="entry-id">
-                <!-- 动态表单字段将在这里插入 -->
                 <div id="dynamic-form-fields" class="mb-6"></div>
                 <div class="flex items-center justify-between mt-8">
                     <button type="button" id="cancel-btn" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-lg transition-colors">取消</button>
@@ -91,7 +93,7 @@
         </div>
     </div>
     
-    <!-- 删除确认 模态框 (保持不变) -->
+    <!-- 删除确认 模态框 -->
     <div id="delete-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 hidden">
         <div id="delete-modal-content" class="bg-white rounded-2xl shadow-xl w-full max-w-sm p-8">
             <h2 class="text-xl font-bold mb-4 text-center">确认删除</h2>
@@ -103,7 +105,7 @@
         </div>
     </div>
 
-    <!-- 新增：配置模态框 -->
+    <!-- 配置模态框 -->
     <div id="config-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 hidden">
         <div id="config-modal-content" class="bg-white rounded-2xl shadow-xl w-full max-w-2xl p-8 max-h-[80vh] overflow-y-auto">
             <h2 class="text-2xl font-bold mb-6 text-center">配置排行榜表格</h2>
@@ -182,6 +184,7 @@
                     },
                     { key: 'name', header: '名称', type: 'string', headerClass: 'py-3 px-6', cellClass: 'py-3 px-6 font-medium text-gray-800' },
                     { key: 'score', header: '新增', type: 'number', headerClass: 'py-3 px-6 text-center', cellClass: 'py-3 px-6 text-center font-semibold text-blue-600' },
+                    { key: 'isPro', header: '专业版用户', type: 'boolean', headerClass: 'py-3 px-6 text-center', cellClass: 'py-3 px-6 text-center' },
                     { key: 'joinDate', header: '加入日期', type: 'date', headerClass: 'py-3 px-6 text-center', cellClass: 'py-3 px-6 text-center' },
                     {
                         key: 'actions',
@@ -210,9 +213,9 @@
             const loadData = () => {
                 const data = localStorage.getItem(STORAGE_KEY_DATA);
                 leaderboardData = data ? JSON.parse(data) : [
-                    { id: Date.now(), name: 'Alice', score: 98, joinDate: '2023-10-27T10:00:00Z' },
-                    { id: Date.now() + 1, name: 'Bob', score: 85, joinDate: '2023-09-15T12:00:00Z' },
-                    { id: Date.now() + 2, name: 'Charlie', score: 102, joinDate: '2023-11-01T15:30:00Z' },
+                    { id: Date.now(), name: 'Alice', score: 98, isPro: true, joinDate: '2023-10-27T10:00:00Z' },
+                    { id: Date.now() + 1, name: 'Bob', score: 85, isPro: false, joinDate: '2023-09-15T12:00:00Z' },
+                    { id: Date.now() + 2, name: 'Charlie', score: 102, isPro: true, joinDate: '2023-11-01T15:30:00Z' },
                 ];
             };
 
@@ -228,16 +231,15 @@
              */
             const loadConfig = () => {
                 const config = localStorage.getItem(STORAGE_KEY_CONFIG);
-                // 确保 rank 和 actions 列始终存在，不被用户删除
                 const fixedColumns = defaultConfig.columns.filter(c => ['rank', 'actions'].includes(c.key));
                 const userColumns = config ? JSON.parse(config) : [];
-                // 过滤掉用户配置中与固定列重名的，并将固定列添加到最前和最后
+                
                 tableConfig.columns = [
-                    ...fixedColumns.filter(c => c.key === 'rank'),
+                    fixedColumns.find(c => c.key === 'rank'),
                     ...userColumns.filter(uc => !['rank', 'actions'].includes(uc.key)),
-                    ...fixedColumns.filter(c => c.key === 'actions')
+                    fixedColumns.find(c => c.key === 'actions')
                 ];
-                // 如果用户没有配置，则使用默认的 name 和 score
+                
                 if (userColumns.length === 0) {
                      tableConfig.columns = defaultConfig.columns;
                 }
@@ -247,11 +249,23 @@
              * 将表格配置保存到 localStorage
              */
             const saveConfig = () => {
-                // 只保存用户可修改的列，即过滤掉 rank 和 actions
                 const userConfigurableColumns = tableConfig.columns.filter(c => !['rank', 'actions'].includes(c.key));
                 localStorage.setItem(STORAGE_KEY_CONFIG, JSON.stringify(userConfigurableColumns));
             };
 
+            /**
+             * 语音播报函数
+             * @param {string} text - The text to be spoken.
+             */
+            const speak = (text) => {
+                if ('speechSynthesis' in window) {
+                    const utterance = new SpeechSynthesisUtterance(text);
+                    utterance.lang = 'zh-CN'; // Set language to Chinese
+                    window.speechSynthesis.speak(utterance);
+                } else {
+                    console.log('抱歉，您的浏览器不支持语音合成功能。');
+                }
+            };
 
             /**
              * 核心渲染函数，根据配置动态生成表格
@@ -260,12 +274,11 @@
                 leaderboardHead.innerHTML = '';
                 leaderboardBody.innerHTML = '';
 
-                // 渲染表头
                 const headerRow = document.createElement('tr');
                 headerRow.className = 'bg-gray-200 text-gray-600 uppercase text-sm leading-normal';
                 tableConfig.columns.forEach(col => {
                     const th = document.createElement('th');
-                    th.className = col.headerClass || '';
+                    th.className = col.headerClass || 'py-3 px-6 text-left';
                     th.textContent = col.header;
                     headerRow.appendChild(th);
                 });
@@ -277,23 +290,20 @@
                 }
                 emptyState.classList.add('hidden');
 
-                const sortedData = [...leaderboardData].sort((a, b) => b.score - a.score);
+                const sortedData = [...leaderboardData].sort((a, b) => (b.score || 0) - (a.score || 0));
                 sortedData.forEach((entry, index) => {
                     const row = document.createElement('tr');
                     row.className = 'border-b border-gray-200 hover:bg-gray-100';
                     tableConfig.columns.forEach(col => {
                         const cell = document.createElement('td');
-                        cell.className = col.cellClass || '';
+                        cell.className = col.cellClass || 'py-3 px-6 text-left';
 
-                        // 渲染逻辑：优先使用自定义 render 函数
                         if (col.render) {
                             cell.innerHTML = col.render(entry, index);
                         } else {
-                            // 其次根据 type 字段进行类型化渲染
                             const value = entry[col.key];
                             switch (col.type) {
                                 case 'number':
-                                    // 移除货币符号，只显示纯数字
                                     cell.textContent = value !== undefined ? value : '';
                                     break;
                                 case 'boolean':
@@ -301,16 +311,7 @@
                                     break;
                                 case 'date':
                                     try {
-                                        if (value) {
-                                            const date = new Date(value);
-                                            cell.textContent = date.toLocaleDateString('zh-CN', {
-                                                year: 'numeric',
-                                                month: 'long',
-                                                day: 'numeric'
-                                            });
-                                        } else {
-                                            cell.textContent = '';
-                                        }
+                                        cell.textContent = value ? new Date(value).toLocaleDateString('zh-CN') : '';
                                     } catch (e) {
                                         cell.textContent = '无效日期';
                                     }
@@ -336,27 +337,14 @@
 
             // --- 模态框管理 ---
 
-            /**
-             * 动态渲染并显示模态框
-             * @param {object|null} entry - 要编辑的数据对象，新增时为 null
-             */
             const showModal = (entry = null) => {
-                // 重置表单并清空动态字段容器
                 entryForm.reset();
                 dynamicFormFields.innerHTML = '';
                 
-                // 设置模态框标题和要编辑的成员ID
-                if (entry) {
-                    modalTitle.textContent = '编辑成员信息';
-                    entryIdInput.value = entry.id;
-                } else {
-                    modalTitle.textContent = '添加新成员';
-                    entryIdInput.value = '';
-                }
+                modalTitle.textContent = entry ? '编辑成员信息' : '添加新成员';
+                entryIdInput.value = entry ? entry.id : '';
 
-                // 遍历列配置，动态生成表单字段
                 tableConfig.columns.forEach(col => {
-                    // 只为可编辑的列生成表单字段
                     if (col.key !== 'rank' && col.key !== 'actions') {
                         const formFieldDiv = document.createElement('div');
                         formFieldDiv.className = 'mb-4';
@@ -369,7 +357,6 @@
 
                         let inputElement;
 
-                        // 根据数据类型创建不同的输入元素
                         switch (col.type) {
                             case 'number':
                                 inputElement = document.createElement('input');
@@ -387,11 +374,8 @@
                                 inputElement = document.createElement('input');
                                 inputElement.type = 'date';
                                 inputElement.required = true;
-                                // 日期格式化为 YYYY-MM-DD
                                 if (entry && entry[col.key]) {
-                                    const dateObj = new Date(entry[col.key]);
-                                    const formattedDate = dateObj.toISOString().split('T')[0];
-                                    inputElement.value = formattedDate;
+                                    inputElement.value = new Date(entry[col.key]).toISOString().split('T')[0];
                                 }
                                 break;
                             case 'string':
@@ -403,7 +387,6 @@
                                 break;
                         }
 
-                        // 为所有输入元素添加通用属性
                         if (col.type !== 'boolean') {
                             inputElement.className = 'shadow-sm appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500';
                         }
@@ -443,9 +426,6 @@
                 }, 200);
             };
 
-            /**
-             * 新增：显示配置模态框
-             */
             const showConfigModal = () => {
                 renderConfigForm();
                 configModal.classList.remove('hidden');
@@ -453,121 +433,133 @@
                 configModalContent.classList.remove('modal-leave-active');
             };
 
-            /**
-             * 新增：隐藏配置模态框
-             */
             const hideConfigModal = () => {
                 configModalContent.classList.add('modal-leave-active');
                 configModalContent.classList.remove('modal-enter-active');
                 setTimeout(() => configModal.classList.add('hidden'), 200);
             };
 
-            /**
-             * 新增：动态渲染配置表单
-             */
             const renderConfigForm = () => {
                 columnsContainer.innerHTML = '';
-                // 过滤掉不可配置的列 (rank 和 actions)
                 const configurableColumns = tableConfig.columns.filter(c => !['rank', 'actions'].includes(c.key));
 
                 configurableColumns.forEach((col, index) => {
                     const columnHtml = `
-                        <div class="border border-gray-200 p-4 rounded-lg bg-gray-50 relative">
+                        <div class="column-config-item border border-gray-200 p-4 rounded-lg bg-gray-50 relative">
                             <h3 class="text-sm font-semibold text-gray-700 mb-2">列 ${index + 1}</h3>
                             <button type="button" class="remove-column-btn absolute top-2 right-2 text-red-500 hover:text-red-700">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm4 0a1 1 0 012 0v6a1 1 0 11-2 0V8z" clip-rule="evenodd" /></svg>
                             </button>
-                            <div class="mb-2">
-                                <label class="block text-gray-600 text-sm mb-1">列名 (Header):</label>
-                                <input type="text" data-key="header" value="${col.header || ''}" class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            </div>
-                            <div class="mb-2">
-                                <label class="block text-gray-600 text-sm mb-1">数据键 (Key):</label>
-                                <input type="text" data-key="key" value="${col.key || ''}" class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            </div>
-                            <div>
-                                <label class="block text-gray-600 text-sm mb-1">数据类型 (Type):</label>
-                                <select data-key="type" class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                    <option value="string" ${col.type === 'string' ? 'selected' : ''}>文本 (string)</option>
-                                    <option value="number" ${col.type === 'number' ? 'selected' : ''}>数字 (number)</option>
-                                    <option value="boolean" ${col.type === 'boolean' ? 'selected' : ''}>布尔值 (boolean)</option>
-                                    <option value="date" ${col.type === 'date' ? 'selected' : ''}>日期 (date)</option>
-                                </select>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                <div>
+                                    <label class="block text-gray-600 text-sm mb-1">列名 (Header):</label>
+                                    <input type="text" data-key="header" value="${col.header || ''}" class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                                </div>
+                                <div>
+                                    <label class="block text-gray-600 text-sm mb-1">数据键 (Key):</label>
+                                    <input type="text" data-key="key" value="${col.key || ''}" class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                                </div>
+                                <div>
+                                    <label class="block text-gray-600 text-sm mb-1">数据类型 (Type):</label>
+                                    <select data-key="type" class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                        <option value="string" ${col.type === 'string' ? 'selected' : ''}>文本 (string)</option>
+                                        <option value="number" ${col.type === 'number' ? 'selected' : ''}>数字 (number)</option>
+                                        <option value="boolean" ${col.type === 'boolean' ? 'selected' : ''}>布尔值 (boolean)</option>
+                                        <option value="date" ${col.type === 'date' ? 'selected' : ''}>日期 (date)</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                     `;
                     columnsContainer.insertAdjacentHTML('beforeend', columnHtml);
                 });
 
-                // 为新渲染的删除按钮绑定事件
                 document.querySelectorAll('.remove-column-btn').forEach(btn => {
                     btn.addEventListener('click', (e) => {
-                        // 移除父级 div
-                        e.target.closest('.border').remove();
+                        e.target.closest('.column-config-item').remove();
                     });
                 });
+            };
+            
+            const addNewColumnToForm = () => {
+                 const index = columnsContainer.children.length;
+                 const newColumnHtml = `
+                    <div class="column-config-item border border-gray-200 p-4 rounded-lg bg-gray-50 relative">
+                        <h3 class="text-sm font-semibold text-gray-700 mb-2">新列 ${index + 1}</h3>
+                        <button type="button" class="remove-column-btn absolute top-2 right-2 text-red-500 hover:text-red-700">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm4 0a1 1 0 012 0v6a1 1 0 11-2 0V8z" clip-rule="evenodd" /></svg>
+                        </button>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                            <div>
+                                <label class="block text-gray-600 text-sm mb-1">列名 (Header):</label>
+                                <input type="text" data-key="header" value="" class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                            </div>
+                            <div>
+                                <label class="block text-gray-600 text-sm mb-1">数据键 (Key):</label>
+                                <input type="text" data-key="key" value="" class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                            </div>
+                            <div>
+                                <label class="block text-gray-600 text-sm mb-1">数据类型 (Type):</label>
+                                <select data-key="type" class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <option value="string" selected>文本 (string)</option>
+                                    <option value="number">数字 (number)</option>
+                                    <option value="boolean">布尔值 (boolean)</option>
+                                    <option value="date">日期 (date)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                columnsContainer.insertAdjacentHTML('beforeend', newColumnHtml);
+                const newItem = columnsContainer.lastElementChild;
+                newItem.querySelector('.remove-column-btn').addEventListener('click', (e) => {
+                    e.target.closest('.column-config-item').remove();
+                });
+                newItem.querySelector('input[data-key="header"]').focus();
             };
 
             // --- 事件处理函数 ---
 
-            /**
-             * 处理动态表单提交
-             */
             const handleFormSubmit = (e) => {
                 e.preventDefault();
 
                 const id = entryIdInput.value;
-                const newEntry = {};
+                const newEntryData = {};
                 
-                // 遍历动态生成的表单字段，收集数据
                 dynamicFormFields.querySelectorAll('input, select').forEach(input => {
                     const key = input.id;
                     let value;
 
-                    // 根据输入类型处理值
                     switch (input.type) {
                         case 'number':
-                            value = parseInt(input.value, 10);
+                            value = parseFloat(input.value) || 0;
                             break;
                         case 'checkbox':
                             value = input.checked;
                             break;
                         case 'date':
-                            value = new Date(input.value).toISOString();
+                            value = input.value ? new Date(input.value).toISOString() : null;
                             break;
                         default:
                             value = input.value;
                             break;
                     }
-
-                    newEntry[key] = value;
+                    newEntryData[key] = value;
                 });
                 
-                // 验证必填字段
-                const requiredFields = tableConfig.columns.filter(c => c.key !== 'rank' && c.key !== 'actions' && c.type !== 'boolean');
-                for (const field of requiredFields) {
-                    if (!newEntry[field.key]) {
-                        console.error(`字段 "${field.header}" 缺失或无效`);
-                        return; // 中断函数执行
-                    }
-                }
-                
-                // --- 语音播报逻辑：在数据变化后执行 ---
                 if (id) {
                     const index = leaderboardData.findIndex(item => item.id == id);
                     if (index !== -1) {
                         const oldEntry = leaderboardData[index];
-                        // 检查新增是否有变化
-                        if (newEntry.score !== oldEntry.score) {
-                            speak(`${oldEntry.name} 新增更新为 ${newEntry.score}。`);
+                        if (newEntryData.score !== oldEntry.score) {
+                            speak(`${oldEntry.name} 新增更新为 ${newEntryData.score}。`);
                         }
-                        // 合并旧数据和新数据，防止遗漏未显示的字段
-                        leaderboardData[index] = { ...oldEntry, ...newEntry };
+                        leaderboardData[index] = { ...oldEntry, ...newEntryData };
                     }
                 } else {
-                    // 为新成员添加唯一ID
-                    newEntry.id = Date.now();
-                    leaderboardData.push(newEntry);
+                    newEntryData.id = Date.now();
+                    leaderboardData.push(newEntryData);
+                    speak(`欢迎新成员 ${newEntryData.name}，新增为 ${newEntryData.score}。`);
                 }
 
                 saveData();
@@ -595,143 +587,70 @@
                 hideDeleteModal();
             };
             
-            /**
-             * 处理配置表单提交
-             */
             const handleConfigSubmit = (e) => {
                 e.preventDefault();
                 const newColumns = [];
-                // 遍历动态生成的表单项，构建新的 columns 数组
-                columnsContainer.querySelectorAll('.border').forEach(div => {
-                    const headerInput = div.querySelector('input[data-key="header"]');
-                    const keyInput = div.querySelector('input[data-key="key"]');
-                    const typeSelect = div.querySelector('select[data-key="type"]');
-
-                    // 增强健壮性：增加空值检查，如果找不到元素则跳过
-                    if (headerInput && keyInput && typeSelect) {
-                        const header = headerInput.value;
-                        const key = keyInput.value;
-                        const type = typeSelect.value;
-                        
-                        // 忽略空字段
-                        if (header && key) {
-                            newColumns.push({
-                                header: header,
-                                key: key,
-                                type: type, // 存储新类型
-                                headerClass: 'py-3 px-6',
-                                cellClass: 'py-3 px-6'
-                            });
-                        }
+                columnsContainer.querySelectorAll('.column-config-item').forEach(div => {
+                    const header = div.querySelector('input[data-key="header"]').value;
+                    const key = div.querySelector('input[data-key="key"]').value;
+                    const type = div.querySelector('select[data-key="type"]').value;
+                    
+                    if (header && key) {
+                        newColumns.push({
+                            header: header,
+                            key: key,
+                            type: type,
+                            headerClass: 'py-3 px-6',
+                            cellClass: 'py-3 px-6'
+                        });
                     }
                 });
 
-                // 将固定列和新配置的列合并
                 const fixedColumns = defaultConfig.columns.filter(c => ['rank', 'actions'].includes(c.key));
                 tableConfig.columns = [
-                    ...fixedColumns.filter(c => c.key === 'rank'),
+                    fixedColumns.find(c => c.key === 'rank'),
                     ...newColumns,
-                    ...fixedColumns.filter(c => c.key === 'actions')
+                    fixedColumns.find(c => c.key === 'actions')
                 ];
-
-                saveConfig(); // 保存新配置
-                renderLeaderboard(); // 重新渲染表格
-                hideConfigModal(); // 隐藏模态框
+                
+                saveConfig();
+                renderLeaderboard();
+                hideConfigModal();
             };
 
-            // --- Web Speech API 函数 ---
-            /**
-             * 使用浏览器语音合成播报文本
-             * @param {string} text - 要播报的文本
-             */
-            const speak = (text) => {
-                // 检查浏览器是否支持 Web Speech API
-                if ('speechSynthesis' in window) {
-                    // 创建一个语音实例
-                    const utterance = new SpeechSynthesisUtterance(text);
-                    // 尝试设置为中文，如果失败则使用默认
-                    utterance.lang = 'zh-CN';
-                    // 找到一个中文声音
-                    const voices = window.speechSynthesis.getVoices();
-                    const chineseVoice = voices.find(voice => voice.lang === 'zh-CN' || voice.lang === 'cmn-Hans-CN');
-                    if (chineseVoice) {
-                        utterance.voice = chineseVoice;
-                    }
-                    
-                    // 播放语音
-                    window.speechSynthesis.speak(utterance);
-                } else {
-                    console.warn('您的浏览器不支持 Web Speech API。无法使用语音播报功能。');
-                }
-            };
-            
-            // 确保在获取声音列表后再调用 speak，解决部分浏览器延迟问题
-            window.speechSynthesis.onvoiceschanged = () => {
-                // 这个事件会在声音列表加载完成后触发一次
-                // 可以在这里初始化播报，例如欢迎语
-                speak('排行榜已加载完毕。');
-            };
-
-            // --- 事件监听器绑定 ---
-            addNewBtn.addEventListener('click', () => showModal());
-            cancelBtn.addEventListener('click', hideModal);
-            modal.addEventListener('click', e => e.target === modal && hideModal());
-            entryForm.addEventListener('submit', handleFormSubmit);
-            
-            // 删除模态框事件
-            cancelDeleteBtn.addEventListener('click', hideDeleteModal);
-            deleteModal.addEventListener('click', e => e.target === deleteModal && hideDeleteModal());
-            confirmDeleteBtn.addEventListener('click', confirmDelete);
-            
-            // 配置模态框事件
-            configBtn.addEventListener('click', showConfigModal);
-            cancelConfigBtn.addEventListener('click', hideConfigModal);
-            configModal.addEventListener('click', e => e.target === configModal && hideConfigModal());
-            configForm.addEventListener('submit', handleConfigSubmit);
-            
-            // 添加新列按钮事件
-            addColumnBtn.addEventListener('click', () => {
-                const newColumnHtml = `
-                    <div class="border border-gray-200 p-4 rounded-lg bg-gray-50 relative">
-                        <h3 class="text-sm font-semibold text-gray-700 mb-2">新增列</h3>
-                        <button type="button" class="remove-column-btn absolute top-2 right-2 text-red-500 hover:text-red-700">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm4 0a1 1 0 012 0v6a1 1 0 11-2 0V8z" clip-rule="evenodd" /></svg>
-                        </button>
-                        <div class="mb-2">
-                            <label class="block text-gray-600 text-sm mb-1">列名 (Header):</label>
-                            <input type="text" data-key="header" class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        </div>
-                        <div class="mb-2">
-                            <label class="block text-gray-600 text-sm mb-1">数据键 (Key):</label>
-                            <input type="text" data-key="key" class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        </div>
-                        <div>
-                            <label class="block text-gray-600 text-sm mb-1">数据类型 (Type):</label>
-                            <select data-key="type" class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                <option value="string">文本 (string)</option>
-                                <option value="number">数字 (number)</option>
-                                <option value="boolean">布尔值 (boolean)</option>
-                                <option value="date">日期 (date)</option>
-                            </select>
-                        </div>
-                    </div>
-                `;
-                columnsContainer.insertAdjacentHTML('beforeend', newColumnHtml);
-                // 再次为新生成的按钮绑定事件
-                columnsContainer.lastElementChild.querySelector('.remove-column-btn').addEventListener('click', (e) => {
-                    e.target.closest('.border').remove();
-                });
-            });
-
-            // --- 初始化 ---
+            // --- 初始化和事件绑定 ---
             const init = () => {
+                loadConfig();
                 loadData();
-                loadConfig(); // 先加载配置
-                renderLeaderboard(); // 再根据配置渲染表格
+                renderLeaderboard();
+
+                addNewBtn.addEventListener('click', () => showModal());
+                cancelBtn.addEventListener('click', hideModal);
+                entryForm.addEventListener('submit', handleFormSubmit);
+
+                cancelDeleteBtn.addEventListener('click', hideDeleteModal);
+                confirmDeleteBtn.addEventListener('click', confirmDelete);
+                
+                configBtn.addEventListener('click', showConfigModal);
+                cancelConfigBtn.addEventListener('click', hideConfigModal);
+                configForm.addEventListener('submit', handleConfigSubmit);
+                addColumnBtn.addEventListener('click', addNewColumnToForm);
+                
+                // 点击模态框背景关闭
+                [modal, deleteModal, configModal].forEach(m => {
+                    m.addEventListener('click', (e) => {
+                        if (e.target === m) {
+                            if (m === modal) hideModal();
+                            if (m === deleteModal) hideDeleteModal();
+                            if (m === configModal) hideConfigModal();
+                        }
+                    });
+                });
             };
 
             init();
         });
     </script>
+
 </body>
 </html>
