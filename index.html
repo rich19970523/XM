@@ -551,17 +551,23 @@
                     return;
                 }
                 
-                // 处理新增或编辑逻辑
+                // --- 语音播报逻辑：在数据变化后执行 ---
                 if (id) {
                     const index = leaderboardData.findIndex(item => item.id == id);
                     if (index !== -1) {
+                        const oldEntry = leaderboardData[index];
+                        // 检查分数是否有变化
+                        if (newEntry.score !== oldEntry.score) {
+                            speak(`${oldEntry.name} 新增更新为 ${newEntry.score}。`);
+                        }
                         // 合并旧数据和新数据，防止遗漏未显示的字段
-                        leaderboardData[index] = { ...leaderboardData[index], ...newEntry };
+                        leaderboardData[index] = { ...oldEntry, ...newEntry };
                     }
                 } else {
                     // 为新成员添加唯一ID
                     newEntry.id = Date.now();
                     leaderboardData.push(newEntry);
+                    speak(`新成员 ${newEntry.name} 加入，分数为 ${newEntry.score}。`);
                 }
 
                 saveData();
@@ -582,6 +588,11 @@
             
             const confirmDelete = () => {
                 if (entryIdToDelete) {
+                    // 在删除前获取成员名称进行播报
+                    const entryToDelete = leaderboardData.find(item => item.id == entryIdToDelete);
+                    if (entryToDelete) {
+                         speak(`成员 ${entryToDelete.name} 已被移除。`);
+                    }
                     leaderboardData = leaderboardData.filter(item => item.id != entryIdToDelete);
                     saveData();
                     renderLeaderboard();
@@ -631,6 +642,39 @@
                 saveConfig(); // 保存新配置
                 renderLeaderboard(); // 重新渲染表格
                 hideConfigModal(); // 隐藏模态框
+            };
+
+            // --- Web Speech API 函数 ---
+            /**
+             * 使用浏览器语音合成播报文本
+             * @param {string} text - 要播报的文本
+             */
+            const speak = (text) => {
+                // 检查浏览器是否支持 Web Speech API
+                if ('speechSynthesis' in window) {
+                    // 创建一个语音实例
+                    const utterance = new SpeechSynthesisUtterance(text);
+                    // 尝试设置为中文，如果失败则使用默认
+                    utterance.lang = 'zh-CN';
+                    // 找到一个中文声音
+                    const voices = window.speechSynthesis.getVoices();
+                    const chineseVoice = voices.find(voice => voice.lang === 'zh-CN' || voice.lang === 'cmn-Hans-CN');
+                    if (chineseVoice) {
+                        utterance.voice = chineseVoice;
+                    }
+                    
+                    // 播放语音
+                    window.speechSynthesis.speak(utterance);
+                } else {
+                    console.warn('您的浏览器不支持 Web Speech API。无法使用语音播报功能。');
+                }
+            };
+            
+            // 确保在获取声音列表后再调用 speak，解决部分浏览器延迟问题
+            window.speechSynthesis.onvoiceschanged = () => {
+                // 这个事件会在声音列表加载完成后触发一次
+                // 可以在这里初始化播报，例如欢迎语
+                speak('排行榜已加载完毕。');
             };
 
             // --- 事件监听器绑定 ---
