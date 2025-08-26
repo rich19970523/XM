@@ -138,7 +138,6 @@
             const entryForm = document.getElementById('entry-form');
             const modalTitle = document.getElementById('modal-title');
             const entryIdInput = document.getElementById('entry-id');
-            // 新增：动态表单字段的容器
             const dynamicFormFields = document.getElementById('dynamic-form-fields');
 
             // 删除确认模态框元素
@@ -183,7 +182,6 @@
                     },
                     { key: 'name', header: '名称', type: 'string', headerClass: 'py-3 px-6', cellClass: 'py-3 px-6 font-medium text-gray-800' },
                     { key: 'score', header: '新增', type: 'number', headerClass: 'py-3 px-6 text-center', cellClass: 'py-3 px-6 text-center font-semibold text-blue-600' },
-                    { key: 'isPro', header: '专业版用户', type: 'boolean', headerClass: 'py-3 px-6 text-center', cellClass: 'py-3 px-6 text-center' },
                     { key: 'joinDate', header: '加入日期', type: 'date', headerClass: 'py-3 px-6 text-center', cellClass: 'py-3 px-6 text-center' },
                     {
                         key: 'actions',
@@ -212,9 +210,9 @@
             const loadData = () => {
                 const data = localStorage.getItem(STORAGE_KEY_DATA);
                 leaderboardData = data ? JSON.parse(data) : [
-                    { id: Date.now(), name: 'Alice', score: 98, isPro: true, joinDate: '2023-10-27T10:00:00Z' },
-                    { id: Date.now() + 1, name: 'Bob', score: 85, isPro: false, joinDate: '2023-09-15T12:00:00Z' },
-                    { id: Date.now() + 2, name: 'Charlie', score: 102, isPro: true, joinDate: '2023-11-01T15:30:00Z' },
+                    { id: Date.now(), name: 'Alice', score: 98, joinDate: '2023-10-27T10:00:00Z' },
+                    { id: Date.now() + 1, name: 'Bob', score: 85, joinDate: '2023-09-15T12:00:00Z' },
+                    { id: Date.now() + 2, name: 'Charlie', score: 102, joinDate: '2023-11-01T15:30:00Z' },
                 ];
             };
 
@@ -545,11 +543,13 @@
                     newEntry[key] = value;
                 });
                 
-                // 验证必填字段（这里只验证'name'和'score'作为示例）
-                if (!newEntry.name || isNaN(newEntry.score)) {
-                    // 如果字段缺失，可以添加更友好的提示
-                    console.error('名称或分数缺失');
-                    return;
+                // 验证必填字段
+                const requiredFields = tableConfig.columns.filter(c => c.key !== 'rank' && c.key !== 'actions' && c.type !== 'boolean');
+                for (const field of requiredFields) {
+                    if (!newEntry[field.key]) {
+                        console.error(`字段 "${field.header}" 缺失或无效`);
+                        return; // 中断函数执行
+                    }
                 }
                 
                 // --- 语音播报逻辑：在数据变化后执行 ---
@@ -557,7 +557,7 @@
                     const index = leaderboardData.findIndex(item => item.id == id);
                     if (index !== -1) {
                         const oldEntry = leaderboardData[index];
-                        // 检查分数是否有变化
+                        // 检查新增是否有变化
                         if (newEntry.score !== oldEntry.score) {
                             speak(`${oldEntry.name} 新增更新为 ${newEntry.score}。`);
                         }
