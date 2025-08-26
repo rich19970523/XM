@@ -182,7 +182,7 @@
                         }
                     },
                     { key: 'name', header: '名称', type: 'string', headerClass: 'py-3 px-6', cellClass: 'py-3 px-6 font-medium text-gray-800' },
-                    { key: 'score', header: '分数', type: 'number', headerClass: 'py-3 px-6 text-center', cellClass: 'py-3 px-6 text-center font-semibold text-blue-600' },
+                    { key: 'score', header: '新增', type: 'number', headerClass: 'py-3 px-6 text-center', cellClass: 'py-3 px-6 text-center font-semibold text-blue-600' },
                     { key: 'isPro', header: '专业版用户', type: 'boolean', headerClass: 'py-3 px-6 text-center', cellClass: 'py-3 px-6 text-center' },
                     { key: 'joinDate', header: '加入日期', type: 'date', headerClass: 'py-3 px-6 text-center', cellClass: 'py-3 px-6 text-center' },
                     {
@@ -295,7 +295,7 @@
                             const value = entry[col.key];
                             switch (col.type) {
                                 case 'number':
-                                    cell.textContent = value !== undefined ? `￥${value}` : '';
+                                    cell.textContent = value !== undefined ? `人数${value}` : '';
                                     break;
                                 case 'boolean':
                                     cell.innerHTML = value ? '✅' : '❌';
@@ -567,7 +567,7 @@
                     // 为新成员添加唯一ID
                     newEntry.id = Date.now();
                     leaderboardData.push(newEntry);
-                    speak(`新成员 ${newEntry.name} 加入，分数为 ${newEntry.score}。`);
+                    speak(`新成员 ${newEntry.name} 加入，新增为 ${newEntry.score}。`);
                 }
 
                 saveData();
@@ -586,7 +586,7 @@
                 showDeleteModal(id);
             };
             
-            const confirmDelete = () => {
+            //const confirmDelete = () => {
                 if (entryIdToDelete) {
                     // 在删除前获取成员名称进行播报
                     const entryToDelete = leaderboardData.find(item => item.id == entryIdToDelete);
