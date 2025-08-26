@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>推广排行榜</title>
+    <title>带实时语音播报的可配置动态排行榜</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body {
@@ -30,7 +30,7 @@
     <div class="container mx-auto p-4 sm:p-6 lg:p-8">
         
         <header class="text-center mb-8">
-            <h1 class="text-3xl sm:text-4xl font-bold text-gray-900">推广排行榜</h1>
+            <h1 class="text-3xl sm:text-4xl font-bold text-gray-900">带实时语音播报的可配置动态排行榜</h1>
             <p class="text-gray-600 mt-2">数据和配置均保存在您的浏览器中</p>
         </header>
 
@@ -295,7 +295,8 @@
                             const value = entry[col.key];
                             switch (col.type) {
                                 case 'number':
-                                    cell.textContent = value !== undefined ? `人数${value}` : '';
+                                    // 移除货币符号，只显示纯数字
+                                    cell.textContent = value !== undefined ? value : '';
                                     break;
                                 case 'boolean':
                                     cell.innerHTML = value ? '✅' : '❌';
@@ -567,7 +568,6 @@
                     // 为新成员添加唯一ID
                     newEntry.id = Date.now();
                     leaderboardData.push(newEntry);
-                    speak(`新成员 ${newEntry.name} 加入，新增为 ${newEntry.score}。`);
                 }
 
                 saveData();
@@ -586,13 +586,8 @@
                 showDeleteModal(id);
             };
             
-            //const confirmDelete = () => {
+            const confirmDelete = () => {
                 if (entryIdToDelete) {
-                    // 在删除前获取成员名称进行播报
-                    const entryToDelete = leaderboardData.find(item => item.id == entryIdToDelete);
-                    if (entryToDelete) {
-                         speak(`成员 ${entryToDelete.name} 已被移除。`);
-                    }
                     leaderboardData = leaderboardData.filter(item => item.id != entryIdToDelete);
                     saveData();
                     renderLeaderboard();
