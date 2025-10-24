@@ -3,654 +3,250 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>推广排行榜</title>
+    <title>体育数据模块原型</title>
+    <!-- 引入Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 引入Inter字体 -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
     <style>
+        /* 将Inter字体应用到全局 */
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+            font-family: 'Inter', 'Helvetica Neue', 'Arial', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            /* 基础背景色：改为更深的炭黑色，对比更强 */
+            background-color: #1A1A1A;
         }
-        .modal-enter-active {
-            animation: modal-in 0.2s ease-out forwards;
+        /* 隐藏水平滚动条 */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
         }
-        .modal-leave-active {
-            animation: modal-out 0.2s ease-in forwards;
-        }
-        @keyframes modal-in {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
-        }
-        @keyframes modal-out {
-            from { opacity: 1; transform: scale(1); }
-            to { opacity: 0; transform: scale(0.95); }
+        .no-scrollbar {
+            -ms-overflow-style: none; /* IE and Edge */
+            scrollbar-width: none; /* Firefox */
         }
     </style>
 </head>
-<body class="bg-gray-100 text-gray-800">
+<body class="text-white min-h-screen">
 
-    <div class="container mx-auto p-4 sm:p-6 lg:p-8">
-        
-        <header class="text-center mb-8">
-            <h1 class="text-3xl sm:text-4xl font-bold text-gray-900">推广排行榜</h1>
-            <p class="text-gray-600 mt-2">数据和配置均保存在您的浏览器中</p>
-        </header>
+    <!-- 容器：模拟移动端视图，并为底部导航留出空间 -->
+    <div class="max-w-md mx-auto bg-[#1A1A1A] min-h-screen pb-24">
 
-        <main class="bg-white rounded-2xl shadow-lg p-6 max-w-4xl mx-auto">
+        <!-- 1. 顶部导航 (移动端样式) -->
+        <nav class="bg-[#1A1A1A] shadow-lg sticky top-0 z-50 flex items-center justify-between h-16 px-4">
+            <!-- Logo/站点名称 -->
+            <div class="flex-shrink-0">
+                <span class="text-2xl font-bold text-white">SPORTS DATA</span>
+            </div>
             
-            <div class="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
-                <h2 class="text-xl font-semibold">排行榜列表</h2>
-                <div class="flex-shrink-0">
-                    <button id="config-btn" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-lg shadow-md transition-transform transform hover:scale-105 mr-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-2" viewBox="0 0 20 20" fill="currentColor">
-                            <path d="M5 4a1 1 0 00-2 0v6a1 1 0 002 0V4zM11 4a1 1 0 00-2 0v10a1 1 0 002 0V4zM17 8a1 1 0 00-2 0v2a1 1 0 002 0V8z" />
-                        </svg>
-                        配置表格
-                    </button>
-                    <button id="add-new-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow-md transition-transform transform hover:scale-105">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-2" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
-                        </svg>
-                        添加新成员
-                    </button>
+            <!-- 右侧用户操作 -->
+            <div class="flex items-center space-x-4">
+                <button class="text-gray-300 hover:text-white">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                </button>
+                <img class="h-8 w-8 rounded-full" src="https://placehold.co/40x40/39FF14/1A1A1A?text=U" alt="用户头像">
+            </div>
+        </nav>
+
+        <!-- 2. 筛选区 (吸顶) -->
+        <div class="sticky top-16 z-40 bg-[#1A1A1A] pt-2 pb-3 shadow-md">
+            
+            <!-- 体育项目选择 (水平滚动) -->
+            <div class="flex space-x-4 overflow-x-auto no-scrollbar px-4 mb-3">
+                <!-- 选中项：霓虹绿背景 -->
+                <a href="#" class="flex-shrink-0 px-4 py-2 rounded-full text-sm font-semibold bg-[#39FF14] text-[#1A1A1A]">
+                    全部
+                </a>
+                <a href="#" class="flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium text-gray-300 bg-[#2A2A2A] hover:bg-gray-700">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-1" viewBox="0 0 20 20" fill="currentColor">
+                       <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM4.332 8.027a6.002 6.002 0 0110.11-3.536l-1.06 1.06a4.5 4.5 0 00-7.53 3.03l-1.52.38zm12.11 3.536a6.002 6.002 0 01-10.11 3.536l1.06-1.06a4.5 4.5 0 007.53-3.03l1.52-.38z" clip-rule="evenodd" />
+                    </svg>
+                    足球
+                </a>
+                <a href="#" class="flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium text-gray-300 bg-[#2A2A2A] hover:bg-gray-700">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-1" viewBox="0 0 20 20" fill="currentColor">
+                       <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM5.5 9.5a.5.5 0 01.5-.5h2a.5.5 0 01.5.5v1a.5.5 0 01-.5.5h-2a.5.5 0 01-.5-.5v-1zM11 9.5a.5.5 0 01.5-.5h2a.5.5 0 01.5.5v1a.5.5 0 01-.5.5h-2a.5.5 0 01-.5-.5v-1zm-1 3a.5.5 0 01.5-.5h2a.5.5 0 01.5.5v1a.5.5 0 01-.5.5h-2a.5.5 0 01-.5-.5v-1zM8 12.5a.5.5 0 01.5-.5h2a.5.5 0 01.5.5v1a.5.5 0 01-.5.5h-2a.5.5 0 01-.5-.5v-1z" clip-rule="evenodd" />
+                    </svg>
+                    篮球
+                </a>
+                <a href="#" class="flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium text-gray-300 bg-[#2A2A2A] hover:bg-gray-700">网球</a>
+                <a href="#" class="flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium text-gray-300 bg-[#2A2A2A] hover:bg-gray-700">赛马</a>
+                <a href="#" class="flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium text-gray-300 bg-[#2A2A2A] hover:bg-gray-700">电竞</a>
+            </div>
+
+            <!-- 日期和筛选条件 -->
+            <div class="px-4 flex justify-between items-center h-8">
+                <div class="flex space-x-4">
+                    <a href="#" class="text-gray-400 hover:text-white text-sm font-medium">昨日</a>
+                    <!-- 选中项：霓虹绿下划线 -->
+                    <a href="#" class="text-white text-sm font-medium border-b-2 border-[#39FF14]">今日</a>
+                    <a href="#" class="text-gray-400 hover:text-white text-sm font-medium">明日</a>
+                </div>
+                <div class="flex space-x-3">
+                     <!-- 选中项：霓虹绿文字 -->
+                    <a href="#" class="text-[#39FF14] text-sm font-medium">
+                        进行中
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white text-sm font-medium">已结束</a>
+                    <a href="#" class="text-gray-400 hover:text-white text-sm font-medium">我的关注</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. 核心内容区 (单列信息流) -->
+        <main class="p-4 flex flex-col gap-4">
+            
+            <!-- 赛事卡片示例 1: 直播中 (特别突出) -->
+            <!-- 强对比：白色背景 + 霓虹绿边框 -->
+            <div class="bg-white rounded-xl shadow-2xl transition-all duration-300 ease-in-out shadow-[#39FF14]/30 border-2 border-[#39FF14] text-black">
+                <div class="p-4">
+                    <!-- 卡片顶部信息 -->
+                    <div class="flex justify-between items-center mb-4">
+                        <div class="flex items-center space-x-2">
+                            <span class="text-gray-500 text-sm font-medium">欧洲冠军联赛</span>
+                        </div>
+                        <!-- 状态：直播中 (霓虹绿) -->
+                        <div class="flex items-center space-x-2">
+                            <span class="h-3 w-3 bg-[#39FF14] rounded-full animate-pulse"></span>
+                            <span class="text-[#1A1A1A] font-semibold text-sm">直播中 78'</span>
+                        </div>
+                    </div>
+                    
+                    <!-- 核心数据：球队 vs 比分 -->
+                    <div class="flex justify-between items-center">
+                        <!-- 球队信息 -->
+                        <div class="space-y-2 text-center w-[100px]">
+                            <img src="https://placehold.co/40x40/0A1128/FFFFFF?text=RMD" class="h-10 w-10 rounded-full mx-auto shadow-md" alt="球队A">
+                            <span class="text-black font-bold text-base truncate block">皇家马德里</span>
+                        </div>
+                        
+                        <!-- 比分 (特大号 霓虹绿粗体字) -->
+                        <div class="px-2">
+                            <span class="text-[#39FF14] text-5xl font-black tracking-tighter">2 - 1</span>
+                        </div>
+                        
+                        <!-- 球队信息 -->
+                        <div class="space-y-2 text-center w-[100px]">
+                            <img src="https://placehold.co/40x40/E83A3E/FFFFFF?text=BAY" class="h-10 w-10 rounded-full mx-auto shadow-md" alt="球队B">
+                            <span class="text-black font-bold text-base truncate block">拜仁慕尼黑</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- 操作按钮：视频/动画 (参考图) -->
+                <div class="bg-gray-50 p-3 rounded-b-xl flex justify-between items-center">
+                    <span class="text-gray-500 text-xs">角球: 8-3 / 黄牌: 1-2</span>
+                    <div class="flex space-x-2">
+                         <button class="bg-red-600 text-white font-bold py-1 px-3 rounded-lg shadow-md hover:bg-red-700 transition-colors text-sm flex items-center space-x-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                              <path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 5.447a.5.5 0 00-.894-.448l-4 8a.5.5 0 00.894.448l4-8z" />
+                              <path d="M15 6a1 1 0 100-2 1 1 0 000 2z" />
+                            </svg>
+                            <span>视频</span>
+                         </button>
+                         <!-- 动画按钮：霓虹绿高亮 -->
+                         <button class="bg-[#39FF14] text-[#1A1A1A] font-bold py-1 px-3 rounded-lg shadow-md hover:bg-opacity-90 transition-colors text-sm flex items-center space-x-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 5.168A.5.5 0 009 5.5v4.21l-2.757 1.654a.5.5 0 00.5 1.732l3-1.8a.5.5 0 00.257-.434V5.5a.5.5 0 00-.445-.332zM10.5 9.79l2.757-1.654a.5.5 0 01.5 1.732l-3 1.8a.5.5 0 01-.257-.434V9.79z" clip-rule="evenodd" />
+                            </svg>
+                            <span>动画</span>
+                         </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 赛事卡片示例 2: 已结束 (深色卡片) -->
+            <div class="bg-[#2A2A2A] rounded-xl shadow-lg transition-all duration-300 ease-in-out hover:bg-gray-700">
+                <div class="p-4 flex justify-between items-center">
+                    <div class="w-1/4 text-center space-y-1">
+                        <img src="https://placehold.co/40x40/552583/FDB927?text=LAL" class="h-10 w-10 rounded-full mx-auto" alt="球队A">
+                        <span class="text-white font-semibold text-sm truncate block">洛杉矶湖人</span>
+                    </div>
+                    
+                    <div class="w-1/2 text-center">
+                        <span class="text-gray-400 text-xs">NBA 常规赛 / 已结束</span>
+                        <div class="text-gray-100 text-3xl font-black tracking-tighter my-1">128 - 111</div>
+                        <span class="text-gray-400 text-xs">勒布朗: 34分</span>
+                    </div>
+
+                    <div class="w-1/4 text-center space-y-1">
+                        <img src="https://placehold.co/40x40/006BB6/ED174C?text=GWS" class="h-10 w-10 rounded-full mx-auto" alt="球队B">
+                        <span class="text-white font-semibold text-sm truncate block">金州勇士</span>
+                    </div>
                 </div>
             </div>
 
-            <div class="overflow-x-auto">
-                <table class="w-full text-left table-auto">
-                    <thead id="leaderboard-head">
-                        <!-- 表头将在这里动态生成 -->
-                    </thead>
-                    <tbody id="leaderboard-body" class="text-gray-700 text-sm font-light">
-                        <!-- 表格内容将在这里动态生成 -->
-                    </tbody>
-                </table>
+            <!-- 赛事卡片示例 3: 未开始 (深色卡片) -->
+            <div class="bg-[#2A2A2A] rounded-xl shadow-lg transition-all duration-300 ease-in-out hover:bg-gray-700">
+                <div class="p-4 flex justify-between items-center">
+                    <div class="w-1/4 text-center space-y-1">
+                        <img src="https://placehold.co/40x40/1E40AF/FFFFFF?text=NAD" class="h-10 w-10 rounded-full mx-auto" alt="选手A">
+                        <span class="text-white font-semibold text-sm truncate block">纳达尔</span>
+                    </div>
+                    
+                    <div class="w-1/2 text-center">
+                        <span class="text-gray-400 text-xs">美网公开赛 / 23:00</span>
+                        <div class="text-white text-4xl font-black my-1">VS</div>
+                        <span class="text-gray-400 text-xs">赔率: 1.85 - 2.10</span>
+                    </div>
+
+                    <div class="w-1/4 text-center space-y-1">
+                        <img src="https://placehold.co/40x40/D97706/FFFFFF?text=DJO" class="h-10 w-10 rounded-full mx-auto" alt="选手B">
+                        <span class="text-white font-semibold text-sm truncate block">德约科维奇</span>
+                    </div>
+                </div>
+                 <!-- 订阅按钮 (参考图) -->
+                <div class="border-t border-gray-700 p-2 flex justify-end">
+                    <button class="text-gray-300 font-medium py-1 px-3 rounded-lg hover:bg-gray-600 transition-colors text-xs flex items-center space-x-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                          <path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v1H5V4zM5 8v10a2 2 0 002 2h6a2 2 0 002-2V8H5z" />
+                        </svg>
+                        <span>订阅</span>
+                    </button>
+                </div>
             </div>
             
-            <div id="empty-state" class="text-center py-12 text-gray-500 hidden">
-                <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
-                <p class="mt-4 text-lg">排行榜是空的</p>
-                <p class="mt-1">点击 "添加新成员" 来创建第一条记录吧！</p>
-            </div>
+            <!-- 更多卡片... -->
+
         </main>
     </div>
 
-    <!-- 添加/编辑 模态框 -->
-    <div id="modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 hidden">
-        <div id="modal-content" class="bg-white rounded-2xl shadow-xl w-full max-w-md p-8">
-            <h2 id="modal-title" class="text-2xl font-bold mb-6 text-center">添加新成员</h2>
-            <form id="entry-form">
-                <input type="hidden" id="entry-id">
-                <div id="dynamic-form-fields" class="mb-6"></div>
-                <div class="flex items-center justify-between mt-8">
-                    <button type="button" id="cancel-btn" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-lg transition-colors">取消</button>
-                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow-md transition-colors">保存</button>
-                </div>
-            </form>
-        </div>
-    </div>
-    
-    <!-- 删除确认 模态框 -->
-    <div id="delete-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 hidden">
-        <div id="delete-modal-content" class="bg-white rounded-2xl shadow-xl w-full max-w-sm p-8">
-            <h2 class="text-xl font-bold mb-4 text-center">确认删除</h2>
-            <p class="text-gray-600 text-center mb-6">您确定要删除这条记录吗？此操作无法撤销。</p>
-            <div class="flex justify-center space-x-4">
-                <button id="cancel-delete-btn" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-6 rounded-lg transition-colors">取消</button>
-                <button id="confirm-delete-btn" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-lg shadow-md transition-colors">删除</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- 配置模态框 -->
-    <div id="config-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 hidden">
-        <div id="config-modal-content" class="bg-white rounded-2xl shadow-xl w-full max-w-2xl p-8 max-h-[80vh] overflow-y-auto">
-            <h2 class="text-2xl font-bold mb-6 text-center">配置排行榜表格</h2>
-            <form id="config-form">
-                <div id="columns-container" class="space-y-4 mb-6">
-                    <!-- 动态生成的列配置表单项将在这里插入 -->
-                </div>
-                <button type="button" id="add-column-btn" class="w-full bg-gray-100 hover:bg-gray-200 text-gray-600 font-bold py-3 px-4 rounded-lg border-2 border-dashed border-gray-300 transition-colors">
-                    + 新增列
-                </button>
-                <div class="flex items-center justify-between mt-8">
-                    <button type="button" id="cancel-config-btn" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-lg transition-colors">取消</button>
-                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow-md transition-colors">保存配置</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // --- DOM 元素获取 ---
-            const addNewBtn = document.getElementById('add-new-btn');
-            const configBtn = document.getElementById('config-btn');
-            const leaderboardHead = document.getElementById('leaderboard-head');
-            const leaderboardBody = document.getElementById('leaderboard-body');
-            const emptyState = document.getElementById('empty-state');
-            
-            // 编辑/新增模态框元素
-            const modal = document.getElementById('modal');
-            const modalContent = document.getElementById('modal-content');
-            const cancelBtn = document.getElementById('cancel-btn');
-            const entryForm = document.getElementById('entry-form');
-            const modalTitle = document.getElementById('modal-title');
-            const entryIdInput = document.getElementById('entry-id');
-            const dynamicFormFields = document.getElementById('dynamic-form-fields');
-
-            // 删除确认模态框元素
-            const deleteModal = document.getElementById('delete-modal');
-            const deleteModalContent = document.getElementById('delete-modal-content');
-            const cancelDeleteBtn = document.getElementById('cancel-delete-btn');
-            const confirmDeleteBtn = document.getElementById('confirm-delete-btn');
-            
-            // 配置模态框元素
-            const configModal = document.getElementById('config-modal');
-            const configModalContent = document.getElementById('config-modal-content');
-            const configForm = document.getElementById('config-form');
-            const columnsContainer = document.getElementById('columns-container');
-            const addColumnBtn = document.getElementById('add-column-btn');
-            const cancelConfigBtn = document.getElementById('cancel-config-btn');
-
-            // --- 数据存储键 ---
-            const STORAGE_KEY_DATA = 'leaderboardData';
-            const STORAGE_KEY_CONFIG = 'leaderboardConfig';
-
-            // --- 应用状态 ---
-            let leaderboardData = [];
-            let tableConfig = { columns: [] };
-            let entryIdToDelete = null;
-
-            // --- 默认配置 ---
-            const defaultConfig = {
-                columns: [
-                    {
-                        key: 'rank',
-                        header: '排名',
-                        headerClass: 'py-3 px-6 text-center',
-                        cellClass: 'py-3 px-6 text-center',
-                        render: (entry, index) => {
-                            const rank = index + 1;
-                            let rankClass = 'text-gray-600';
-                            if (rank === 1) rankClass = 'text-yellow-500 font-bold';
-                            if (rank === 2) rankClass = 'text-gray-500 font-bold';
-                            if (rank === 3) rankClass = 'text-orange-700 font-bold';
-                            return `<span class="text-lg ${rankClass}">${rank}</span>`;
-                        }
-                    },
-                    { key: 'name', header: '名称', type: 'string', headerClass: 'py-3 px-6', cellClass: 'py-3 px-6 font-medium text-gray-800' },
-                    { key: 'score', header: '新增', type: 'number', headerClass: 'py-3 px-6 text-center', cellClass: 'py-3 px-6 text-center font-semibold text-blue-600' },
-                    { key: 'isPro', header: '专业版用户', type: 'boolean', headerClass: 'py-3 px-6 text-center', cellClass: 'py-3 px-6 text-center' },
-                    { key: 'joinDate', header: '加入日期', type: 'date', headerClass: 'py-3 px-6 text-center', cellClass: 'py-3 px-6 text-center' },
-                    {
-                        key: 'actions',
-                        header: '操作',
-                        headerClass: 'py-3 px-6 text-center',
-                        cellClass: 'py-3 px-6 text-center',
-                        render: (entry) => `
-                            <div class="flex item-center justify-center space-x-2">
-                                <button data-id="${entry.id}" class="edit-btn w-8 h-8 flex items-center justify-center bg-green-200 text-green-700 rounded-full hover:bg-green-300 transition-colors" title="编辑">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 pointer-events-none" viewBox="0 0 20 20" fill="currentColor"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" /><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" /></svg>
-                                </button>
-                                <button data-id="${entry.id}" class="delete-btn w-8 h-8 flex items-center justify-center bg-red-200 text-red-700 rounded-full hover:bg-red-300 transition-colors" title="删除">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 pointer-events-none" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm4 0a1 1 0 012 0v6a1 1 0 11-2 0V8z" clip-rule="evenodd" /></svg>
-                                </button>
-                            </div>
-                        `
-                    }
-                ]
-            };
-
-            // --- 核心函数 ---
-
-            /**
-             * 从 localStorage 加载排行榜数据
-             */
-            const loadData = () => {
-                const data = localStorage.getItem(STORAGE_KEY_DATA);
-                leaderboardData = data ? JSON.parse(data) : [
-                    { id: Date.now(), name: 'Alice', score: 98, isPro: true, joinDate: '2023-10-27T10:00:00Z' },
-                    { id: Date.now() + 1, name: 'Bob', score: 85, isPro: false, joinDate: '2023-09-15T12:00:00Z' },
-                    { id: Date.now() + 2, name: 'Charlie', score: 102, isPro: true, joinDate: '2023-11-01T15:30:00Z' },
-                ];
-            };
-
-            /**
-             * 将排行榜数据保存到 localStorage
-             */
-            const saveData = () => {
-                localStorage.setItem(STORAGE_KEY_DATA, JSON.stringify(leaderboardData));
-            };
-
-            /**
-             * 从 localStorage 加载表格配置
-             */
-            const loadConfig = () => {
-                const config = localStorage.getItem(STORAGE_KEY_CONFIG);
-                const fixedColumns = defaultConfig.columns.filter(c => ['rank', 'actions'].includes(c.key));
-                const userColumns = config ? JSON.parse(config) : [];
-                
-                tableConfig.columns = [
-                    fixedColumns.find(c => c.key === 'rank'),
-                    ...userColumns.filter(uc => !['rank', 'actions'].includes(uc.key)),
-                    fixedColumns.find(c => c.key === 'actions')
-                ];
-                
-                if (userColumns.length === 0) {
-                     tableConfig.columns = defaultConfig.columns;
-                }
-            };
-            
-            /**
-             * 将表格配置保存到 localStorage
-             */
-            const saveConfig = () => {
-                const userConfigurableColumns = tableConfig.columns.filter(c => !['rank', 'actions'].includes(c.key));
-                localStorage.setItem(STORAGE_KEY_CONFIG, JSON.stringify(userConfigurableColumns));
-            };
-
-            /**
-             * 语音播报函数
-             * @param {string} text - The text to be spoken.
-             */
-            const speak = (text) => {
-                if ('speechSynthesis' in window) {
-                    const utterance = new SpeechSynthesisUtterance(text);
-                    utterance.lang = 'zh-CN'; // Set language to Chinese
-                    window.speechSynthesis.speak(utterance);
-                } else {
-                    console.log('抱歉，您的浏览器不支持语音合成功能。');
-                }
-            };
-
-            /**
-             * 核心渲染函数，根据配置动态生成表格
-             */
-            const renderLeaderboard = () => {
-                leaderboardHead.innerHTML = '';
-                leaderboardBody.innerHTML = '';
-
-                const headerRow = document.createElement('tr');
-                headerRow.className = 'bg-gray-200 text-gray-600 uppercase text-sm leading-normal';
-                tableConfig.columns.forEach(col => {
-                    const th = document.createElement('th');
-                    th.className = col.headerClass || 'py-3 px-6 text-left';
-                    th.textContent = col.header;
-                    headerRow.appendChild(th);
-                });
-                leaderboardHead.appendChild(headerRow);
-
-                if (leaderboardData.length === 0) {
-                    emptyState.classList.remove('hidden');
-                    return;
-                }
-                emptyState.classList.add('hidden');
-
-                const sortedData = [...leaderboardData].sort((a, b) => (b.score || 0) - (a.score || 0));
-                sortedData.forEach((entry, index) => {
-                    const row = document.createElement('tr');
-                    row.className = 'border-b border-gray-200 hover:bg-gray-100';
-                    tableConfig.columns.forEach(col => {
-                        const cell = document.createElement('td');
-                        cell.className = col.cellClass || 'py-3 px-6 text-left';
-
-                        if (col.render) {
-                            cell.innerHTML = col.render(entry, index);
-                        } else {
-                            const value = entry[col.key];
-                            switch (col.type) {
-                                case 'number':
-                                    cell.textContent = value !== undefined ? value : '';
-                                    break;
-                                case 'boolean':
-                                    cell.innerHTML = value ? '✅' : '❌';
-                                    break;
-                                case 'date':
-                                    try {
-                                        cell.textContent = value ? new Date(value).toLocaleDateString('zh-CN') : '';
-                                    } catch (e) {
-                                        cell.textContent = '无效日期';
-                                    }
-                                    break;
-                                case 'string':
-                                default:
-                                    cell.textContent = value !== undefined ? value : '';
-                                    break;
-                            }
-                        }
-                        row.appendChild(cell);
-                    });
-                    leaderboardBody.appendChild(row);
-                });
-
-                attachActionListeners();
-            };
-
-            const attachActionListeners = () => {
-                document.querySelectorAll('.edit-btn').forEach(btn => btn.addEventListener('click', handleEdit));
-                document.querySelectorAll('.delete-btn').forEach(btn => btn.addEventListener('click', handleDelete));
-            };
-
-            // --- 模态框管理 ---
-
-            const showModal = (entry = null) => {
-                entryForm.reset();
-                dynamicFormFields.innerHTML = '';
-                
-                modalTitle.textContent = entry ? '编辑成员信息' : '添加新成员';
-                entryIdInput.value = entry ? entry.id : '';
-
-                tableConfig.columns.forEach(col => {
-                    if (col.key !== 'rank' && col.key !== 'actions') {
-                        const formFieldDiv = document.createElement('div');
-                        formFieldDiv.className = 'mb-4';
-
-                        const label = document.createElement('label');
-                        label.htmlFor = col.key;
-                        label.className = 'block text-gray-700 text-sm font-bold mb-2';
-                        label.textContent = col.header + ':';
-                        formFieldDiv.appendChild(label);
-
-                        let inputElement;
-
-                        switch (col.type) {
-                            case 'number':
-                                inputElement = document.createElement('input');
-                                inputElement.type = 'number';
-                                inputElement.required = true;
-                                if (entry) inputElement.value = entry[col.key] || '';
-                                break;
-                            case 'boolean':
-                                inputElement = document.createElement('input');
-                                inputElement.type = 'checkbox';
-                                inputElement.className = 'form-checkbox h-5 w-5 text-blue-600 rounded-md';
-                                if (entry && entry[col.key]) inputElement.checked = true;
-                                break;
-                            case 'date':
-                                inputElement = document.createElement('input');
-                                inputElement.type = 'date';
-                                inputElement.required = true;
-                                if (entry && entry[col.key]) {
-                                    inputElement.value = new Date(entry[col.key]).toISOString().split('T')[0];
-                                }
-                                break;
-                            case 'string':
-                            default:
-                                inputElement = document.createElement('input');
-                                inputElement.type = 'text';
-                                inputElement.required = true;
-                                if (entry) inputElement.value = entry[col.key] || '';
-                                break;
-                        }
-
-                        if (col.type !== 'boolean') {
-                            inputElement.className = 'shadow-sm appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500';
-                        }
-                        inputElement.id = col.key;
-                        inputElement.name = col.key;
-                        inputElement.placeholder = `请输入${col.header}`;
-                        
-                        formFieldDiv.appendChild(inputElement);
-                        dynamicFormFields.appendChild(formFieldDiv);
-                    }
-                });
-                
-                modal.classList.remove('hidden');
-                modalContent.classList.add('modal-enter-active');
-                modalContent.classList.remove('modal-leave-active');
-            };
-
-            const hideModal = () => {
-                modalContent.classList.add('modal-leave-active');
-                modalContent.classList.remove('modal-enter-active');
-                setTimeout(() => modal.classList.add('hidden'), 200);
-            };
-            
-            const showDeleteModal = (id) => {
-                entryIdToDelete = id;
-                deleteModal.classList.remove('hidden');
-                deleteModalContent.classList.add('modal-enter-active');
-                deleteModalContent.classList.remove('modal-leave-active');
-            };
-
-            const hideDeleteModal = () => {
-                deleteModalContent.classList.add('modal-leave-active');
-                deleteModalContent.classList.remove('modal-enter-active');
-                setTimeout(() => {
-                    deleteModal.classList.add('hidden');
-                    entryIdToDelete = null;
-                }, 200);
-            };
-
-            const showConfigModal = () => {
-                renderConfigForm();
-                configModal.classList.remove('hidden');
-                configModalContent.classList.add('modal-enter-active');
-                configModalContent.classList.remove('modal-leave-active');
-            };
-
-            const hideConfigModal = () => {
-                configModalContent.classList.add('modal-leave-active');
-                configModalContent.classList.remove('modal-enter-active');
-                setTimeout(() => configModal.classList.add('hidden'), 200);
-            };
-
-            const renderConfigForm = () => {
-                columnsContainer.innerHTML = '';
-                const configurableColumns = tableConfig.columns.filter(c => !['rank', 'actions'].includes(c.key));
-
-                configurableColumns.forEach((col, index) => {
-                    const columnHtml = `
-                        <div class="column-config-item border border-gray-200 p-4 rounded-lg bg-gray-50 relative">
-                            <h3 class="text-sm font-semibold text-gray-700 mb-2">列 ${index + 1}</h3>
-                            <button type="button" class="remove-column-btn absolute top-2 right-2 text-red-500 hover:text-red-700">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm4 0a1 1 0 012 0v6a1 1 0 11-2 0V8z" clip-rule="evenodd" /></svg>
-                            </button>
-                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                                <div>
-                                    <label class="block text-gray-600 text-sm mb-1">列名 (Header):</label>
-                                    <input type="text" data-key="header" value="${col.header || ''}" class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-                                </div>
-                                <div>
-                                    <label class="block text-gray-600 text-sm mb-1">数据键 (Key):</label>
-                                    <input type="text" data-key="key" value="${col.key || ''}" class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-                                </div>
-                                <div>
-                                    <label class="block text-gray-600 text-sm mb-1">数据类型 (Type):</label>
-                                    <select data-key="type" class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                        <option value="string" ${col.type === 'string' ? 'selected' : ''}>文本 (string)</option>
-                                        <option value="number" ${col.type === 'number' ? 'selected' : ''}>数字 (number)</option>
-                                        <option value="boolean" ${col.type === 'boolean' ? 'selected' : ''}>布尔值 (boolean)</option>
-                                        <option value="date" ${col.type === 'date' ? 'selected' : ''}>日期 (date)</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                    columnsContainer.insertAdjacentHTML('beforeend', columnHtml);
-                });
-
-                document.querySelectorAll('.remove-column-btn').forEach(btn => {
-                    btn.addEventListener('click', (e) => {
-                        e.target.closest('.column-config-item').remove();
-                    });
-                });
-            };
-            
-            const addNewColumnToForm = () => {
-                 const index = columnsContainer.children.length;
-                 const newColumnHtml = `
-                    <div class="column-config-item border border-gray-200 p-4 rounded-lg bg-gray-50 relative">
-                        <h3 class="text-sm font-semibold text-gray-700 mb-2">新列 ${index + 1}</h3>
-                        <button type="button" class="remove-column-btn absolute top-2 right-2 text-red-500 hover:text-red-700">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm4 0a1 1 0 012 0v6a1 1 0 11-2 0V8z" clip-rule="evenodd" /></svg>
-                        </button>
-                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                            <div>
-                                <label class="block text-gray-600 text-sm mb-1">列名 (Header):</label>
-                                <input type="text" data-key="header" value="" class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-                            </div>
-                            <div>
-                                <label class="block text-gray-600 text-sm mb-1">数据键 (Key):</label>
-                                <input type="text" data-key="key" value="" class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-                            </div>
-                            <div>
-                                <label class="block text-gray-600 text-sm mb-1">数据类型 (Type):</label>
-                                <select data-key="type" class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                    <option value="string" selected>文本 (string)</option>
-                                    <option value="number">数字 (number)</option>
-                                    <option value="boolean">布尔值 (boolean)</option>
-                                    <option value="date">日期 (date)</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                columnsContainer.insertAdjacentHTML('beforeend', newColumnHtml);
-                const newItem = columnsContainer.lastElementChild;
-                newItem.querySelector('.remove-column-btn').addEventListener('click', (e) => {
-                    e.target.closest('.column-config-item').remove();
-                });
-                newItem.querySelector('input[data-key="header"]').focus();
-            };
-
-            // --- 事件处理函数 ---
-
-            const handleFormSubmit = (e) => {
-                e.preventDefault();
-
-                const id = entryIdInput.value;
-                const newEntryData = {};
-                
-                dynamicFormFields.querySelectorAll('input, select').forEach(input => {
-                    const key = input.id;
-                    let value;
-
-                    switch (input.type) {
-                        case 'number':
-                            value = parseFloat(input.value) || 0;
-                            break;
-                        case 'checkbox':
-                            value = input.checked;
-                            break;
-                        case 'date':
-                            value = input.value ? new Date(input.value).toISOString() : null;
-                            break;
-                        default:
-                            value = input.value;
-                            break;
-                    }
-                    newEntryData[key] = value;
-                });
-                
-                if (id) {
-                    const index = leaderboardData.findIndex(item => item.id == id);
-                    if (index !== -1) {
-                        const oldEntry = leaderboardData[index];
-                        if (newEntryData.score !== oldEntry.score) {
-                            speak(`${oldEntry.name} 新增更新为 ${newEntryData.score}。`);
-                        }
-                        leaderboardData[index] = { ...oldEntry, ...newEntryData };
-                    }
-                } else {
-                    newEntryData.id = Date.now();
-                    leaderboardData.push(newEntryData);
-                    speak(`欢迎新成员 ${newEntryData.name}，新增为 ${newEntryData.score}。`);
-                }
-
-                saveData();
-                renderLeaderboard();
-                hideModal();
-            };
-
-            const handleEdit = (e) => {
-                const id = e.currentTarget.dataset.id;
-                const entry = leaderboardData.find(item => item.id == id);
-                if (entry) showModal(entry);
-            };
-
-            const handleDelete = (e) => {
-                const id = e.currentTarget.dataset.id;
-                showDeleteModal(id);
-            };
-            
-            const confirmDelete = () => {
-                if (entryIdToDelete) {
-                    leaderboardData = leaderboardData.filter(item => item.id != entryIdToDelete);
-                    saveData();
-                    renderLeaderboard();
-                }
-                hideDeleteModal();
-            };
-            
-            const handleConfigSubmit = (e) => {
-                e.preventDefault();
-                const newColumns = [];
-                columnsContainer.querySelectorAll('.column-config-item').forEach(div => {
-                    const header = div.querySelector('input[data-key="header"]').value;
-                    const key = div.querySelector('input[data-key="key"]').value;
-                    const type = div.querySelector('select[data-key="type"]').value;
-                    
-                    if (header && key) {
-                        newColumns.push({
-                            header: header,
-                            key: key,
-                            type: type,
-                            headerClass: 'py-3 px-6',
-                            cellClass: 'py-3 px-6'
-                        });
-                    }
-                });
-
-                const fixedColumns = defaultConfig.columns.filter(c => ['rank', 'actions'].includes(c.key));
-                tableConfig.columns = [
-                    fixedColumns.find(c => c.key === 'rank'),
-                    ...newColumns,
-                    fixedColumns.find(c => c.key === 'actions')
-                ];
-                
-                saveConfig();
-                renderLeaderboard();
-                hideConfigModal();
-            };
-
-            // --- 初始化和事件绑定 ---
-            const init = () => {
-                loadConfig();
-                loadData();
-                renderLeaderboard();
-
-                addNewBtn.addEventListener('click', () => showModal());
-                cancelBtn.addEventListener('click', hideModal);
-                entryForm.addEventListener('submit', handleFormSubmit);
-
-                cancelDeleteBtn.addEventListener('click', hideDeleteModal);
-                confirmDeleteBtn.addEventListener('click', confirmDelete);
-                
-                configBtn.addEventListener('click', showConfigModal);
-                cancelConfigBtn.addEventListener('click', hideConfigModal);
-                configForm.addEventListener('submit', handleConfigSubmit);
-                addColumnBtn.addEventListener('click', addNewColumnToForm);
-                
-                // 点击模态框背景关闭
-                [modal, deleteModal, configModal].forEach(m => {
-                    m.addEventListener('click', (e) => {
-                        if (e.target === m) {
-                            if (m === modal) hideModal();
-                            if (m === deleteModal) hideDeleteModal();
-                            if (m === configModal) hideConfigModal();
-                        }
-                    });
-                });
-            };
-
-            init();
-        });
-    </script>
+    <!-- 4. 底部Tab导航栏 (新增) -->
+    <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto h-16 bg-[#2A2A2A] border-t border-gray-700 flex justify-around items-center z-50">
+        <a href="#" class="flex flex-col items-center justify-center text-gray-400 hover:text-white w-full">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6-4h.01M9 16h.01" />
+            </svg>
+            <span class="text-xs font-medium">首页</span>
+        </a>
+        <!-- 选中项：霓虹绿 -->
+        <a href="#" class="flex flex-col items-center justify-center text-[#39FF14] hover:text-[#39FF14] w-full">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 5.168A.5.5 0 009 5.5v4.21l-2.757 1.654a.5.5 0 00.5 1.732l3-1.8a.5.5 0 00.257-.434V5.5a.5.5 0 00-.445-.332zM10.5 9.79l2.757-1.654a.5.5 0 01.5 1.732l-3 1.8a.5.5 0 01-.257-.434V9.79z" clip-rule="evenodd" />
+            </svg>
+            <span class="text-xs font-medium">赛事</span>
+        </a>
+        <a href="#" class="flex flex-col items-center justify-center text-gray-400 hover:text-white w-full">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+            </svg>
+            <span class="text-xs font-medium">数据</span>
+        </a>
+        <a href="#" class="flex flex-col items-center justify-center text-gray-400 hover:text-white w-full">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+            </svg>
+            <span class="text-xs font-medium">资讯</span>
+        </a>
+        <a href="#" class="flex flex-col items-center justify-center text-gray-400 hover:text-white w-full">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+            </svg>
+            <span class="text-xs font-medium">我的</span>
+        </a>
+    </nav>
 
 </body>
 </html>
+
