@@ -166,9 +166,9 @@
                     </div>
                     
                     <div class="bg-stone-50 dark:bg-stone-950/50 border border-stone-100 dark:border-stone-800 rounded-xl p-4 text-sm text-stone-500 dark:text-stone-400 space-y-2 transition-colors duration-300">
-                        <p class="flex items-start"><i data-lucide="mouse-pointer-click" class="w-4 h-4 mr-2 mt-0.5 shrink-0"></i> <span>便签可贴在屏幕的<strong class="dark:text-stone-300">任何位置</strong>（无区域限制），拖拽即可移动。</span></p>
-                        <p class="flex items-start text-xs text-stone-400 dark:text-stone-500"><span class="ml-6">Notes can be dragged and placed anywhere on the screen (no boundaries).</span></p>
-                        <p class="flex items-start"><i data-lucide="languages" class="w-4 h-4 mr-2 mt-0.5 shrink-0"></i> <span>输入中文或英文，停止打字 2 秒后将<strong class="dark:text-stone-300">自动翻译</strong>并双语云端保存。</span></p>
+                        <p class="flex items-start"><i data-lucide="mouse-pointer-click" class="w-4 h-4 mr-2 mt-0.5 shrink-0"></i> <span>点击便签顶部 📌 图标，可切换<strong class="dark:text-stone-300">“固定在屏幕”</strong>或<strong class="dark:text-stone-300">“随页面滚动”</strong>。</span></p>
+                        <p class="flex items-start text-xs text-stone-400 dark:text-stone-500"><span class="ml-6">Click the 📌 icon to toggle between Fixed to screen vs Scroll with page.</span></p>
+                        <p class="flex items-start mt-2"><i data-lucide="languages" class="w-4 h-4 mr-2 mt-0.5 shrink-0"></i> <span>输入中文或英文，停止打字 2 秒后将<strong class="dark:text-stone-300">自动翻译</strong>。</span></p>
                         <p class="flex items-start text-xs text-stone-400 dark:text-stone-500"><span class="ml-6">Auto-translates between Chinese and English 2 seconds after typing.</span></p>
                     </div>
                 </div>
@@ -178,7 +178,7 @@
     </div>
 
     <!-- Global Fullscreen Container for Free-Dragging Sticky Notes -->
-    <div id="global-notes-container" class="fixed inset-0 pointer-events-none z-[100]">
+    <div id="global-notes-container" class="absolute top-0 left-0 pointer-events-none z-[100]">
         <!-- Notes injected here -->
     </div>
 
@@ -456,16 +456,27 @@
             notesArray.forEach(note => {
                 const noteEl = document.createElement('div');
                 noteEl.dataset.id = note.id;
-                // Important: position: absolute within the fixed global container allows unrestricted dragging
-                noteEl.className = `sticky-note absolute w-56 h-56 p-4 rounded-lg flex flex-col pointer-events-auto ${note.color}`;
+                
+                // Set CSS positioning dynamically (fixed to window, or absolute to scroll with document)
+                const isFixed = note.isFixed !== false; // Default to true if undefined
+                const positionClass = isFixed ? 'fixed' : 'absolute';
+                const pinOpacityClass = isFixed ? 'opacity-100 text-stone-900 fill-stone-800' : 'opacity-40 text-stone-800/60 fill-transparent';
+                
+                noteEl.className = `sticky-note ${positionClass} w-56 h-56 p-4 rounded-lg flex flex-col pointer-events-auto ${note.color}`;
                 noteEl.style.left = `${note.x}px`;
                 noteEl.style.top = `${note.y}px`;
                 noteEl.style.transform = `rotate(${note.rotation}deg)`;
                 
                 noteEl.innerHTML = `
                     <div class="drag-handle h-6 w-full flex justify-between items-center -mt-2 -mx-2 pl-4 pr-2 mb-2 cursor-grab active:cursor-grabbing">
-                        <i data-lucide="pin" class="w-5 h-5 text-stone-800/40 opacity-60 ml-[80px] drop-shadow-sm"></i>
-                        <div class="flex items-center gap-2">
+                        <div class="flex-1"></div>
+                        
+                        <!-- Toggle Pin Button -->
+                        <button class="toggle-pin-btn p-1.5 hover:bg-black/10 rounded-full transition-all active:scale-95 z-10 cursor-pointer" title="点击切换：固定屏幕 / 随网页滚动">
+                            <i data-lucide="pin" class="w-4 h-4 ${pinOpacityClass} drop-shadow-sm transition-all"></i>
+                        </button>
+                        
+                        <div class="flex-1 flex justify-end items-center gap-2">
                             <span class="translate-status opacity-0 group-hover:opacity-100 transition-opacity"></span>
                             <button class="delete-note-btn opacity-0 group-hover:opacity-100 hover:bg-black/10 rounded-full p-1 transition-all"><i data-lucide="x" class="w-3 h-3 text-stone-800/70"></i></button>
                         </div>
@@ -481,7 +492,7 @@
 
         // Add new Note anywhere on screen
         addNoteBtn.addEventListener('click', () => {
-            // Spawn near the center of the viewport
+            // Spawn near the center of the viewport (fixed by default)
             const x = Math.max(0, (window.innerWidth / 2) - 112 + (Math.random() * 100 - 50));
             const y = Math.max(0, (window.innerHeight / 2) - 112 + (Math.random() * 100 - 50));
             
@@ -491,6 +502,7 @@
                 lastSourceText: '',
                 x: parseInt(x),
                 y: parseInt(y),
+                isFixed: true, // Default to fixed to screen viewport
                 color: colors[Math.floor(Math.random() * colors.length)],
                 rotation: Math.floor(Math.random() * 6) - 3 // -3 to 3 degrees
             };
@@ -500,14 +512,45 @@
             saveNotes();
         });
 
-        // Event Delegation for Wall (Delete, Translation trigger)
+        // Event Delegation for Wall (Delete, Pin Toggle, Translation trigger)
         globalNotesContainer.addEventListener('click', (e) => {
+            // Delete Note
             const delBtn = e.target.closest('.delete-note-btn');
             if (delBtn) {
                 const id = delBtn.closest('.sticky-note').dataset.id;
                 notesArray = notesArray.filter(n => n.id !== id);
                 renderNotes();
                 saveNotes();
+                return;
+            }
+            
+            // Toggle Pin (Fixed vs Scrollable)
+            const pinBtn = e.target.closest('.toggle-pin-btn');
+            if (pinBtn) {
+                const id = pinBtn.closest('.sticky-note').dataset.id;
+                const note = notesArray.find(n => n.id === id);
+                if (note) {
+                    const scrollY = window.scrollY || document.documentElement.scrollTop;
+                    const scrollX = window.scrollX || document.documentElement.scrollLeft;
+                    
+                    if (note.isFixed !== false) {
+                        // Switching to Unfixed (Absolute relative to document)
+                        note.isFixed = false;
+                        note.x += scrollX;
+                        note.y += scrollY;
+                    } else {
+                        // Switching to Fixed (Relative to viewport)
+                        note.isFixed = true;
+                        note.x -= scrollX;
+                        note.y -= scrollY;
+                        // Prevent flying off viewport if scrolled far down
+                        note.x = Math.max(0, Math.min(note.x, window.innerWidth - 224));
+                        note.y = Math.max(0, Math.min(note.y, window.innerHeight - 224));
+                    }
+                    saveNotes();
+                    renderNotes();
+                }
+                return;
             }
         });
 
@@ -577,11 +620,17 @@
             
             isEditingNotes = true; 
             
+            const id = noteEl.dataset.id;
+            const note = notesArray.find(n => n.id === id);
+            const isFixed = note ? (note.isFixed !== false) : true;
+            
             dragInfo = {
-                id: noteEl.dataset.id,
+                id: id,
                 el: noteEl,
-                startX: e.clientX,
-                startY: e.clientY,
+                isFixed: isFixed,
+                // Start coords depend on positioning context
+                startX: isFixed ? e.clientX : e.pageX,
+                startY: isFixed ? e.clientY : e.pageY,
                 origX: parseInt(noteEl.style.left) || 0,
                 origY: parseInt(noteEl.style.top) || 0
             };
@@ -594,14 +643,25 @@
             if (!dragInfo) return;
             e.preventDefault(); 
             
-            const dx = e.clientX - dragInfo.startX;
-            const dy = e.clientY - dragInfo.startY;
+            const currentX = dragInfo.isFixed ? e.clientX : e.pageX;
+            const currentY = dragInfo.isFixed ? e.clientY : e.pageY;
+            
+            const dx = currentX - dragInfo.startX;
+            const dy = currentY - dragInfo.startY;
+            
             let newX = dragInfo.origX + dx;
             let newY = dragInfo.origY + dy;
             
-            // Constrain to window boundaries so notes don't get lost
-            newX = Math.max(0, Math.min(newX, window.innerWidth - dragInfo.el.offsetWidth));
-            newY = Math.max(0, Math.min(newY, window.innerHeight - dragInfo.el.offsetHeight));
+            // Constrain boundaries dynamically based on state
+            if (dragInfo.isFixed) {
+                // Constrain to Viewport Window
+                newX = Math.max(0, Math.min(newX, window.innerWidth - dragInfo.el.offsetWidth));
+                newY = Math.max(0, Math.min(newY, window.innerHeight - dragInfo.el.offsetHeight));
+            } else {
+                // Constrain to Document Scroll Area (but allow growing downwards)
+                newX = Math.max(0, Math.min(newX, document.documentElement.scrollWidth - dragInfo.el.offsetWidth));
+                newY = Math.max(0, newY); // Let it go far down to expand the scroll
+            }
 
             dragInfo.el.style.left = `${newX}px`;
             dragInfo.el.style.top = `${newY}px`;
@@ -695,6 +755,7 @@
                     lastSourceText: "欢迎来到全双语环境！\n\n拖动我到屏幕任意位置。停止打字后会自动双语翻译。",
                     x: Math.max(0, (window.innerWidth / 2) - 250), 
                     y: 150, 
+                    isFixed: true, // Default to fixed
                     color: colors[0], 
                     rotation: -2
                 }];
