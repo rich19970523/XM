@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>温馨自律日程表</title>
+    <title>温馨自律日程表 | Dual-Zone Schedule</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Lucide Icons -->
@@ -23,13 +23,14 @@
             transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
         .sticky-note:hover {
-            box-shadow: 5px 8px 20px rgba(0,0,0,0.12);
+            box-shadow: 5px 8px 20px rgba(0,0,0,0.15);
+            z-index: 110 !important;
         }
         .sticky-note.dragging {
-            box-shadow: 8px 12px 25px rgba(0,0,0,0.2);
+            box-shadow: 8px 15px 30px rgba(0,0,0,0.25);
             opacity: 0.95;
-            cursor: grabbing;
-            z-index: 50 !important;
+            cursor: grabbing !important;
+            z-index: 120 !important;
         }
         
         /* 时间轴高亮动画 */
@@ -48,30 +49,33 @@
         }
     </style>
 </head>
-<body class="bg-[#FFFBF5] text-stone-800 font-sans selection:bg-orange-200 min-h-screen">
-    <div class="max-w-7xl mx-auto p-4 md:p-8">
+<body class="bg-[#FFFBF5] text-stone-800 font-sans selection:bg-orange-200 min-h-screen relative overflow-x-hidden">
+    <div class="max-w-7xl mx-auto p-4 md:p-8 relative z-10">
         
         <!-- Header Section -->
         <header class="text-center mb-10 mt-4 relative">
-            <h1 class="text-3xl md:text-4xl font-serif text-amber-900 font-bold mb-3">
-                🍂 雅思备考与工作温馨自律表
+            <h1 class="text-3xl md:text-4xl font-serif text-amber-900 font-bold mb-3 flex flex-col gap-2">
+                <span>🍂 雅思备考与工作温馨自律表</span>
+                <span class="text-2xl text-amber-800/80">IELTS & Work Dual-Zone Schedule</span>
             </h1>
-            <p class="text-stone-500 md:text-lg">
-                在埃里温的时空里，平衡雅思梦想、高效工作与爱意陪伴。
+            <p class="text-stone-500 md:text-lg flex flex-col mt-2">
+                <span>在埃里温的时空里，平衡雅思梦想、高效工作与爱意陪伴。</span>
+                <span class="text-sm mt-1">Balancing IELTS dreams, efficient work, and love across time zones.</span>
             </p>
-            <div id="current-time-display" class="absolute right-0 top-0 mt-2 mr-4 bg-orange-100 text-orange-800 px-4 py-2 rounded-xl font-mono text-sm shadow-sm border border-orange-200 flex items-center">
-                <i data-lucide="clock" class="w-4 h-4 mr-2"></i>
-                <span id="time-text">--:--</span>
+            
+            <!-- Dual Time Zones -->
+            <div id="current-time-display" class="absolute right-0 top-0 mt-2 mr-4 bg-orange-50 text-orange-900 px-4 py-2 rounded-xl font-mono text-sm shadow-sm border border-orange-200 flex flex-col items-end sm:flex-row sm:items-center">
+                <div class="flex items-center"><i data-lucide="clock" class="w-4 h-4 mr-2"></i> <span id="time-text" class="font-bold tracking-wide">--:--</span></div>
             </div>
         </header>
 
         <div class="grid grid-cols-1 xl:grid-cols-12 gap-8">
             
             <!-- Left Column: Schedule Timeline -->
-            <div class="xl:col-span-5 space-y-6">
-                <h2 class="text-xl font-bold text-stone-700 flex items-center mb-4 border-b border-orange-100 pb-2">
-                    <i data-lucide="sun" class="w-5 h-5 mr-2 text-orange-400"></i>
-                    每日时序 (动态高亮当前任务)
+            <div class="xl:col-span-6 space-y-6">
+                <h2 class="text-xl font-bold text-stone-700 flex flex-col mb-4 border-b border-orange-100 pb-3">
+                    <div class="flex items-center"><i data-lucide="sun" class="w-5 h-5 mr-2 text-orange-400"></i> 每日时序 (动态高亮当前任务)</div>
+                    <div class="text-sm text-stone-400 font-normal ml-7 mt-1">Daily Timeline (Auto-highlights current task)</div>
                 </h2>
                 
                 <div id="schedule-container" class="relative pl-4 border-l-2 border-orange-100 space-y-6">
@@ -80,21 +84,21 @@
             </div>
 
             <!-- Right Column: Tools (Pomodoro & Notes Wall) -->
-            <div class="xl:col-span-7 flex flex-col gap-6">
+            <div class="xl:col-span-6 flex flex-col gap-6">
                 
                 <!-- Pomodoro Timer Card -->
                 <div class="bg-gradient-to-br from-amber-50 to-orange-100 rounded-3xl p-6 shadow-sm border border-orange-200 flex-shrink-0">
-                    <div class="flex items-center justify-between mb-4">
-                        <h2 class="text-xl font-bold text-amber-900 flex items-center">
-                            <i data-lucide="coffee" class="w-5 h-5 mr-2"></i>
-                            专属番茄钟
+                    <div class="flex flex-col lg:flex-row lg:items-center justify-between mb-6 gap-4">
+                        <h2 class="text-xl font-bold text-amber-900 flex flex-col">
+                            <span class="flex items-center"><i data-lucide="coffee" class="w-5 h-5 mr-2"></i> 专属番茄钟</span>
+                            <span class="text-sm text-amber-700/70 font-normal ml-7 mt-0.5">Pomodoro Timer</span>
                         </h2>
-                        <div class="flex bg-white/50 rounded-full p-1 border border-orange-200/50">
-                            <button id="mode-focus-btn" class="px-4 py-1.5 rounded-full text-sm font-medium transition-colors bg-orange-400 text-white shadow-sm">
-                                雅思冲刺
+                        <div class="flex bg-white/50 rounded-full p-1 border border-orange-200/50 w-max">
+                            <button id="mode-focus-btn" class="px-4 py-1.5 rounded-full text-sm font-medium transition-colors bg-orange-400 text-white shadow-sm flex flex-col items-center">
+                                <span>雅思冲刺</span><span class="text-[10px] opacity-80 leading-tight">IELTS Focus</span>
                             </button>
-                            <button id="mode-break-btn" class="px-4 py-1.5 rounded-full text-sm font-medium transition-colors text-orange-800 hover:bg-orange-200/50">
-                                留白休息
+                            <button id="mode-break-btn" class="px-4 py-1.5 rounded-full text-sm font-medium transition-colors text-orange-800 hover:bg-orange-200/50 flex flex-col items-center">
+                                <span>留白休息</span><span class="text-[10px] opacity-80 leading-tight">Break Time</span>
                             </button>
                         </div>
                     </div>
@@ -114,36 +118,44 @@
                             </button>
                         </div>
                     </div>
-                    <p id="timer-status-text" class="text-center sm:text-left text-sm text-orange-700/70 mt-2 sm:ml-8">
-                        保持专注，为了8分的目标前行。
-                    </p>
+                    <div class="mt-4 sm:ml-8 text-center sm:text-left">
+                        <p id="timer-status-text-cn" class="text-sm text-orange-800 font-medium">保持专注，为了8分的目标前行。</p>
+                        <p id="timer-status-text-en" class="text-xs text-orange-700/70 mt-1">Stay focused, moving towards the target of band 8.</p>
+                    </div>
                 </div>
 
-                <!-- Sticky Notes Wall Card -->
-                <div class="bg-white rounded-3xl p-6 shadow-sm border border-stone-200 flex-1 flex flex-col min-h-[500px]">
-                    <div class="flex items-center justify-between mb-4">
-                        <h2 class="text-xl font-bold text-stone-700 flex items-center">
-                            <i data-lucide="sticky-note" class="w-5 h-5 mr-2 text-stone-400"></i>
-                            灵感便签墙
+                <!-- Sticky Notes Control Panel -->
+                <div class="bg-white rounded-3xl p-6 shadow-sm border border-stone-200 flex flex-col">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-4">
+                        <h2 class="text-xl font-bold text-stone-700 flex flex-col">
+                            <span class="flex items-center"><i data-lucide="sticky-note" class="w-5 h-5 mr-2 text-stone-400"></i> 全局灵感便签</span>
+                            <span class="text-sm text-stone-400 font-normal ml-7 mt-0.5">Global Sticky Notes</span>
                         </h2>
                         <div class="flex items-center gap-3">
                             <span id="save-status" class="text-xs text-stone-400 flex items-center">
                                 <i data-lucide="cloud" class="w-3 h-3 mr-1"></i> 已同步
                             </span>
                             <button id="add-note-btn" class="flex items-center px-4 py-2 rounded-xl text-sm font-medium transition-all bg-stone-800 text-white hover:bg-stone-700 shadow-sm active:scale-95">
-                                <i data-lucide="plus" class="w-4 h-4 mr-1"></i> 贴一张
+                                <i data-lucide="plus" class="w-4 h-4 mr-1"></i> 贴一张 (Add)
                             </button>
                         </div>
                     </div>
                     
-                    <!-- Wall Container -->
-                    <div id="notes-wall" class="relative flex-1 bg-[#faf8f5] border border-stone-200 rounded-2xl overflow-hidden shadow-inner touch-none bg-[radial-gradient(#d6d3d1_1px,transparent_1px)] [background-size:24px_24px]">
-                        <!-- Notes injected here -->
+                    <div class="bg-stone-50 border border-stone-100 rounded-xl p-4 text-sm text-stone-500 space-y-2">
+                        <p class="flex items-start"><i data-lucide="mouse-pointer-click" class="w-4 h-4 mr-2 mt-0.5 shrink-0"></i> <span>便签可贴在屏幕的<strong>任何位置</strong>（无区域限制），拖拽即可移动。</span></p>
+                        <p class="flex items-start text-xs text-stone-400"><span class="ml-6">Notes can be dragged and placed anywhere on the screen (no boundaries).</span></p>
+                        <p class="flex items-start"><i data-lucide="languages" class="w-4 h-4 mr-2 mt-0.5 shrink-0"></i> <span>输入中文或英文，停止打字 2 秒后将<strong>自动翻译</strong>并双语云端保存。</span></p>
+                        <p class="flex items-start text-xs text-stone-400"><span class="ml-6">Auto-translates between Chinese and English 2 seconds after typing.</span></p>
                     </div>
                 </div>
 
             </div>
         </div>
+    </div>
+
+    <!-- Global Fullscreen Container for Free-Dragging Sticky Notes -->
+    <div id="global-notes-container" class="fixed inset-0 pointer-events-none z-[100]">
+        <!-- Notes injected here -->
     </div>
 
     <!-- Application Logic -->
@@ -152,15 +164,38 @@
         import { getAuth, signInWithCustomToken, signInAnonymously, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js';
         import { getFirestore, doc, setDoc, onSnapshot } from 'https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js';
 
-        // --- Schedule Data & Logic ---
+        const apiKey = ""; // Environment populates this automatically for Gemini
+
+        // --- Bilingual Schedule Data & Logic ---
         const scheduleData = [
-            { id: 's1', start: 0, end: 10, time: "00:00 - 10:00", title: "深度休息与晨间准备", desc: "拥有长达10个小时的宽裕窗口，安排8-9小时高质量睡眠。悠闲地吃早餐、洗漱，彻底放松。", icon: "moon", color: "text-indigo-500", bg: "bg-indigo-50", border: "border-indigo-100" },
-            { id: 's2', start: 10, end: 11, time: "10:00 - 11:00", title: "准备与通勤", desc: "前往工作地点，调整进入专注状态。", icon: "sun", color: "text-amber-500", bg: "bg-amber-50", border: "border-amber-100" },
-            { id: 's3', start: 11, end: 14, time: "11:00 - 14:00", title: "雅思核心突击", desc: "优先完成英语提分目标。建议专注45分钟，留白15分钟，保持高强度学习的同时处理紧急消息。", icon: "book-open", color: "text-red-500", bg: "bg-red-50", border: "border-red-100" },
-            { id: 's4', start: 14, end: 15, time: "14:00 - 15:00", title: "休息与大脑重启", desc: "吃午餐、闭目养神或散步。彻底离开办公桌，从密集的英语中解脱。", icon: "coffee", color: "text-orange-500", bg: "bg-orange-50", border: "border-orange-100" },
-            { id: 's5', start: 15, end: 20, time: "15:00 - 20:00", title: "集中处理工作", desc: "进入纯粹的业务模式，高效输出，专注处理当天的所有工作任务。", icon: "briefcase", color: "text-blue-500", bg: "bg-blue-50", border: "border-blue-100" },
-            { id: 's6', start: 20, end: 21, time: "20:00 - 21:00", title: "下班锻炼与通勤", desc: "走路回家。播放英文播客进行无压力的“泛听”，将运动与沉浸式语言环境结合。", icon: "footprints", color: "text-emerald-500", bg: "bg-emerald-50", border: "border-emerald-100" },
-            { id: 's7', start: 21, end: 24, time: "21:00 - 24:00", title: "专属陪伴时间", desc: "推开家门后，把工作和备考彻底留在门外，全心全意陪伴女朋友。", icon: "heart", color: "text-pink-500", bg: "bg-pink-50", border: "border-pink-100" },
+            { id: 's1', start: 0, end: 10, time: "00:00 - 10:00", 
+              titleCn: "深度休息与晨间准备", titleEn: "Deep Rest & Morning Prep", 
+              descCn: "拥有长达10个小时的宽裕窗口，安排8-9小时高质量睡眠。悠闲地吃早餐、洗漱，彻底放松。", descEn: "A generous 10-hour window for 8-9 hours of quality sleep. Enjoy a relaxed breakfast and thoroughly unwind.", 
+              icon: "moon", color: "text-indigo-500", bg: "bg-indigo-50", border: "border-indigo-100" },
+            { id: 's2', start: 10, end: 11, time: "10:00 - 11:00", 
+              titleCn: "准备与通勤", titleEn: "Prep & Commute", 
+              descCn: "前往工作地点，调整进入专注状态。", descEn: "Head to the workplace and adjust into a focused state.", 
+              icon: "sun", color: "text-amber-500", bg: "bg-amber-50", border: "border-amber-100" },
+            { id: 's3', start: 11, end: 14, time: "11:00 - 14:00", 
+              titleCn: "雅思核心突击", titleEn: "Core IELTS Sprint", 
+              descCn: "优先完成英语提分目标。建议专注45分钟，留白15分钟，保持高强度学习的同时处理紧急消息。", descEn: "Prioritize IELTS goals. Recommended: 45 min focus + 15 min break. Maintain high-intensity learning while handling urgent tasks.", 
+              icon: "book-open", color: "text-red-500", bg: "bg-red-50", border: "border-red-100" },
+            { id: 's4', start: 14, end: 15, time: "14:00 - 15:00", 
+              titleCn: "休息与大脑重启", titleEn: "Rest & Brain Reboot", 
+              descCn: "吃午餐、闭目养神或散步。彻底离开办公桌，从密集的英语中解脱。", descEn: "Have lunch, rest your eyes, or take a walk. Leave the desk entirely to detach from intensive English.", 
+              icon: "coffee", color: "text-orange-500", bg: "bg-orange-50", border: "border-orange-100" },
+            { id: 's5', start: 15, end: 20, time: "15:00 - 20:00", 
+              titleCn: "集中处理工作", titleEn: "Intensive Work", 
+              descCn: "进入纯粹的业务模式，高效输出，专注处理当天的所有工作任务。", descEn: "Enter pure business mode, output efficiently, and focus on completing all daily work tasks.", 
+              icon: "briefcase", color: "text-blue-500", bg: "bg-blue-50", border: "border-blue-100" },
+            { id: 's6', start: 20, end: 21, time: "20:00 - 21:00", 
+              titleCn: "下班锻炼与通勤", titleEn: "Commute & Exercise", 
+              descCn: "走路回家。播放英文播客进行无压力的“泛听”，将运动与沉浸式语言环境结合。", descEn: "Walk home. Play English podcasts for stress-free extensive listening, combining exercise with an immersive language environment.", 
+              icon: "footprints", color: "text-emerald-500", bg: "bg-emerald-50", border: "border-emerald-100" },
+            { id: 's7', start: 21, end: 24, time: "21:00 - 24:00", 
+              titleCn: "专属陪伴时间", titleEn: "Exclusive Quality Time", 
+              descCn: "推开家门后，把工作和备考彻底留在门外，全心全意陪伴女朋友。", descEn: "Once home, leave work and prep behind. Devote this time entirely to your girlfriend.", 
+              icon: "heart", color: "text-pink-500", bg: "bg-pink-50", border: "border-pink-100" },
         ];
 
         const container = document.getElementById('schedule-container');
@@ -173,40 +208,52 @@
                         <i data-lucide="${item.icon}" class="w-4 h-4 ${item.color}"></i>
                     </div>
                     <div id="card-${item.id}" class="ml-6 bg-white rounded-2xl p-5 shadow-sm border border-stone-100 hover:shadow-md transition-all duration-300">
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-2 gap-2">
-                            <h3 class="text-lg font-bold text-stone-800">${item.title}</h3>
-                            <span class="inline-block px-3 py-1 rounded-full text-sm font-medium ${item.bg} ${item.color} w-max">
+                        <div class="flex flex-col xl:flex-row xl:items-start justify-between mb-3 gap-2">
+                            <div>
+                                <h3 class="text-lg font-bold text-stone-800">${item.titleCn}</h3>
+                                <p class="text-xs font-medium text-stone-400 uppercase tracking-wide">${item.titleEn}</p>
+                            </div>
+                            <span class="inline-block px-3 py-1 rounded-full text-sm font-medium ${item.bg} ${item.color} w-max shrink-0 mt-2 xl:mt-0">
                                 ${item.time}
                             </span>
                         </div>
-                        <p class="text-stone-600 leading-relaxed text-sm md:text-base">
-                            ${item.desc}
-                        </p>
+                        <div class="space-y-1">
+                            <p class="text-stone-600 leading-relaxed text-sm md:text-base">${item.descCn}</p>
+                            <p class="text-stone-400 leading-relaxed text-xs md:text-sm">${item.descEn}</p>
+                        </div>
                     </div>
                 </div>
             `;
             container.insertAdjacentHTML('beforeend', html);
         });
 
-        // Initialize Icons
         lucide.createIcons();
 
-        // Update Time and Highlight Logic
+        // Update Dual Time and Highlight Logic
         function updateTimeAndHighlight() {
             const now = new Date();
-            const h = now.getHours();
-            const m = now.getMinutes();
-            const timeFloat = h + (m / 60);
             
-            // Format time display
+            // Yerevan Time (UTC+4)
+            const yDate = new Date(now.toLocaleString("en-US", {timeZone: "Asia/Yerevan"}));
+            const yH = yDate.getHours();
+            const yM = yDate.getMinutes();
+            
+            // Beijing Time (UTC+8)
+            const bDate = new Date(now.toLocaleString("en-US", {timeZone: "Asia/Shanghai"}));
+            const bH = bDate.getHours();
+            const bM = bDate.getMinutes();
+            
             const timeDisplay = document.getElementById('time-text');
-            timeDisplay.textContent = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
+            timeDisplay.innerHTML = `🇦🇲 EVN ${yH.toString().padStart(2, '0')}:${yM.toString().padStart(2, '0')} <span class="mx-3 text-orange-300">|</span> 🇨🇳 PEK ${bH.toString().padStart(2, '0')}:${bM.toString().padStart(2, '0')}`;
 
-            // Highlight current block
+            // Highlight current block based on Yerevan time float
+            const timeFloat = yH + (yM / 60);
+            
             scheduleData.forEach(item => {
                 const card = document.getElementById(`card-${item.id}`);
                 const icon = document.getElementById(`icon-${item.id}`);
                 
+                // Account for midnight wrap-around on the last item if needed, but our schedule strictly goes to 24
                 if (timeFloat >= item.start && timeFloat < item.end) {
                     card.classList.add('active-schedule-card');
                     card.classList.remove('border-stone-100');
@@ -235,7 +282,10 @@
         const resetTimerBtn = document.getElementById('reset-timer-btn');
         const modeFocusBtn = document.getElementById('mode-focus-btn');
         const modeBreakBtn = document.getElementById('mode-break-btn');
-        const timerStatusText = document.getElementById('timer-status-text');
+        
+        const timerStatusTextCn = document.getElementById('timer-status-text-cn');
+        const timerStatusTextEn = document.getElementById('timer-status-text-en');
+
         const playIconCont = document.getElementById('play-icon-container');
         const pauseIconCont = document.getElementById('pause-icon-container');
 
@@ -260,13 +310,15 @@
             }
 
             if (isFocus) {
-                modeFocusBtn.className = "px-4 py-1.5 rounded-full text-sm font-medium transition-colors bg-orange-400 text-white shadow-sm";
-                modeBreakBtn.className = "px-4 py-1.5 rounded-full text-sm font-medium transition-colors text-orange-800 hover:bg-orange-200/50";
-                timerStatusText.textContent = "保持专注，为了8分的目标前行。";
+                modeFocusBtn.className = "px-4 py-1.5 rounded-full text-sm font-medium transition-colors bg-orange-400 text-white shadow-sm flex flex-col items-center";
+                modeBreakBtn.className = "px-4 py-1.5 rounded-full text-sm font-medium transition-colors text-orange-800 hover:bg-orange-200/50 flex flex-col items-center";
+                timerStatusTextCn.textContent = "保持专注，为了8分的目标前行。";
+                timerStatusTextEn.textContent = "Stay focused, moving towards the target of band 8.";
             } else {
-                modeFocusBtn.className = "px-4 py-1.5 rounded-full text-sm font-medium transition-colors text-orange-800 hover:bg-orange-200/50";
-                modeBreakBtn.className = "px-4 py-1.5 rounded-full text-sm font-medium transition-colors bg-emerald-400 text-white shadow-sm";
-                timerStatusText.textContent = "大脑重启中，喝杯水，站起来活动一下吧。";
+                modeFocusBtn.className = "px-4 py-1.5 rounded-full text-sm font-medium transition-colors text-orange-800 hover:bg-orange-200/50 flex flex-col items-center";
+                modeBreakBtn.className = "px-4 py-1.5 rounded-full text-sm font-medium transition-colors bg-emerald-400 text-white shadow-sm flex flex-col items-center";
+                timerStatusTextCn.textContent = "大脑重启中，喝杯水，站起来活动一下吧。";
+                timerStatusTextEn.textContent = "Brain rebooting. Drink some water and stand up for a stretch.";
             }
         }
 
@@ -312,8 +364,8 @@
         modeBreakBtn.addEventListener('click', () => switchMode('break'));
 
 
-        // --- Sticky Notes Wall Logic ---
-        const wall = document.getElementById('notes-wall');
+        // --- Global Sticky Notes Logic & AI Translation ---
+        const globalNotesContainer = document.getElementById('global-notes-container');
         const addNoteBtn = document.getElementById('add-note-btn');
         const saveStatus = document.getElementById('save-status');
         
@@ -326,44 +378,74 @@
             'bg-[#e9d5ff]'  // purple
         ];
 
-        // Dragging State
+        // Exponential backoff for API
+        async function translateText(text) {
+            if (!text.trim()) return "";
+            const payload = {
+                contents: [{ parts: [{ text: `You are an automatic translator inside a bilingual memo app. Translate the following text. If it is mostly Chinese, translate it to English. If it is mostly English, translate it to Chinese. Reply ONLY with the translated text, do not add any quotes, markdown formatting, or extra explanations.\n\nText: ${text}` }] }]
+            };
+            
+            let retries = 5;
+            let delays = [1000, 2000, 4000, 8000, 16000];
+            for(let i=0; i<retries; i++) {
+                try {
+                    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    if(!response.ok) throw new Error("API Error");
+                    const data = await response.json();
+                    return data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || "";
+                } catch (e) {
+                    if (i === retries - 1) return "";
+                    await new Promise(r => setTimeout(r, delays[i]));
+                }
+            }
+        }
+
         let dragInfo = null;
         let isEditingNotes = false; 
+        const translateDelay = 2000;
 
         function renderNotes() {
-            wall.innerHTML = '';
+            globalNotesContainer.innerHTML = '';
             notesArray.forEach(note => {
                 const noteEl = document.createElement('div');
                 noteEl.dataset.id = note.id;
-                noteEl.className = `sticky-note absolute w-48 h-48 p-4 rounded-lg flex flex-col cursor-grab ${note.color}`;
+                // Important: position: absolute within the fixed global container allows unrestricted dragging
+                noteEl.className = `sticky-note absolute w-56 h-56 p-4 rounded-lg flex flex-col pointer-events-auto ${note.color}`;
                 noteEl.style.left = `${note.x}px`;
                 noteEl.style.top = `${note.y}px`;
                 noteEl.style.transform = `rotate(${note.rotation}deg)`;
                 
                 noteEl.innerHTML = `
-                    <div class="drag-handle h-6 w-full flex justify-between items-start -mt-2 -mx-2 pl-4 pr-2 mb-1">
-                        <i data-lucide="pin" class="w-5 h-5 text-stone-700/30 opacity-60 ml-[60px] drop-shadow-sm"></i>
-                        <button class="delete-note-btn opacity-0 group-hover:opacity-100 hover:bg-black/10 rounded-full p-1 transition-all"><i data-lucide="x" class="w-3 h-3 text-stone-600"></i></button>
+                    <div class="drag-handle h-6 w-full flex justify-between items-center -mt-2 -mx-2 pl-4 pr-2 mb-2 cursor-grab active:cursor-grabbing">
+                        <i data-lucide="pin" class="w-5 h-5 text-stone-700/30 opacity-60 ml-[80px] drop-shadow-sm"></i>
+                        <div class="flex items-center gap-2">
+                            <span class="translate-status opacity-0 group-hover:opacity-100 transition-opacity"></span>
+                            <button class="delete-note-btn opacity-0 group-hover:opacity-100 hover:bg-black/10 rounded-full p-1 transition-all"><i data-lucide="x" class="w-3 h-3 text-stone-600"></i></button>
+                        </div>
                     </div>
-                    <textarea class="no-scrollbar flex-1 bg-transparent border-none outline-none resize-none text-[15px] leading-relaxed text-stone-800 placeholder-stone-800/40 cursor-text">${note.text}</textarea>
+                    <textarea class="no-scrollbar flex-1 bg-transparent border-none outline-none resize-none text-[15px] leading-relaxed text-stone-800 placeholder-stone-800/40 cursor-text" placeholder="输入内容自动翻译...\nType to auto-translate...">${note.text}</textarea>
                 `;
                 
                 noteEl.classList.add('group');
-                wall.appendChild(noteEl);
+                globalNotesContainer.appendChild(noteEl);
             });
             lucide.createIcons();
         }
 
-        // Add new Note
+        // Add new Note anywhere on screen
         addNoteBtn.addEventListener('click', () => {
-            const wallRect = wall.getBoundingClientRect();
-            // Random position near center
-            const x = Math.max(0, (wallRect.width / 2) - 100 + (Math.random() * 60 - 30));
-            const y = Math.max(0, (wallRect.height / 2) - 100 + (Math.random() * 60 - 30));
+            // Spawn near the center of the viewport
+            const x = Math.max(0, (window.innerWidth / 2) - 112 + (Math.random() * 100 - 50));
+            const y = Math.max(0, (window.innerHeight / 2) - 112 + (Math.random() * 100 - 50));
             
             const newNote = {
                 id: Date.now().toString(),
                 text: '',
+                lastSourceText: '',
                 x: parseInt(x),
                 y: parseInt(y),
                 color: colors[Math.floor(Math.random() * colors.length)],
@@ -375,8 +457,8 @@
             saveNotes();
         });
 
-        // Event Delegation for Wall (Delete, Edit, Drag)
-        wall.addEventListener('click', (e) => {
+        // Event Delegation for Wall (Delete, Translation trigger)
+        globalNotesContainer.addEventListener('click', (e) => {
             const delBtn = e.target.closest('.delete-note-btn');
             if (delBtn) {
                 const id = delBtn.closest('.sticky-note').dataset.id;
@@ -386,36 +468,71 @@
             }
         });
 
-        wall.addEventListener('input', (e) => {
+        // Input & Auto-translation debouncing
+        globalNotesContainer.addEventListener('input', (e) => {
             if (e.target.tagName === 'TEXTAREA') {
                 const id = e.target.closest('.sticky-note').dataset.id;
                 const note = notesArray.find(n => n.id === id);
                 if (note) {
                     note.text = e.target.value;
                     scheduleSave();
+                    
+                    // Auto Translation Logic
+                    clearTimeout(note.typingTimer);
+                    note.typingTimer = setTimeout(async () => {
+                        const parts = note.text.split('\n---\n');
+                        const source = parts[0].trim();
+                        
+                        // If there is new source text to translate
+                        if (source && source !== note.lastSourceText) {
+                            const statusEl = document.querySelector(`.sticky-note[data-id="${id}"] .translate-status`);
+                            if(statusEl) statusEl.innerHTML = '<i data-lucide="loader-2" class="w-3 h-3 animate-spin text-stone-500" title="Translating..."></i>';
+                            lucide.createIcons();
+
+                            const translation = await translateText(source);
+                            
+                            if (translation) {
+                                note.text = source + '\n---\n' + translation;
+                                note.lastSourceText = source;
+                                
+                                // Update DOM without re-rendering everything to preserve cursor
+                                const textarea = document.querySelector(`.sticky-note[data-id="${id}"] textarea`);
+                                if (textarea) textarea.value = note.text;
+                                if(statusEl) statusEl.innerHTML = '<i data-lucide="check" class="w-3 h-3 text-emerald-500" title="Translated"></i>';
+                                lucide.createIcons();
+                                saveNotes();
+                                
+                                setTimeout(() => {
+                                    if(statusEl) statusEl.innerHTML = '';
+                                }, 3000);
+                            } else {
+                                if(statusEl) statusEl.innerHTML = '';
+                            }
+                        }
+                    }, translateDelay);
                 }
             }
         });
 
-        // Track editing state to pause Firebase snapshots rewriting DOM
-        wall.addEventListener('focusin', (e) => {
+        globalNotesContainer.addEventListener('focusin', (e) => {
             if (e.target.tagName === 'TEXTAREA') isEditingNotes = true;
         });
-        wall.addEventListener('focusout', (e) => {
+        globalNotesContainer.addEventListener('focusout', (e) => {
             if (e.target.tagName === 'TEXTAREA') {
                 isEditingNotes = false;
                 saveNotes();
             }
         });
 
-        // Drag & Drop Implementation
-        wall.addEventListener('mousedown', (e) => {
+        // Global Drag & Drop Implementation
+        globalNotesContainer.addEventListener('mousedown', (e) => {
+            const dragHandle = e.target.closest('.drag-handle');
             const noteEl = e.target.closest('.sticky-note');
-            // Don't drag if clicking textarea or buttons
+            
+            // Only drag if clicking the handle area or empty space of note, NOT textarea/buttons
             if (!noteEl || e.target.tagName === 'TEXTAREA' || e.target.closest('button')) return;
             
-            isEditingNotes = true; // Pause syncs during drag
-            const wallRect = wall.getBoundingClientRect();
+            isEditingNotes = true; 
             
             dragInfo = {
                 id: noteEl.dataset.id,
@@ -423,27 +540,25 @@
                 startX: e.clientX,
                 startY: e.clientY,
                 origX: parseInt(noteEl.style.left) || 0,
-                origY: parseInt(noteEl.style.top) || 0,
-                wallRect: wallRect
+                origY: parseInt(noteEl.style.top) || 0
             };
             
             noteEl.classList.add('dragging');
-            // Remove rotation while dragging for smoother feel
-            noteEl.style.transform = `rotate(0deg)`; 
+            noteEl.style.transform = `rotate(0deg)`; // flatten during drag
         });
 
         document.addEventListener('mousemove', (e) => {
             if (!dragInfo) return;
-            e.preventDefault(); // Prevent text selection
+            e.preventDefault(); 
             
             const dx = e.clientX - dragInfo.startX;
             const dy = e.clientY - dragInfo.startY;
             let newX = dragInfo.origX + dx;
             let newY = dragInfo.origY + dy;
             
-            // Constrain to wall boundaries
-            newX = Math.max(0, Math.min(newX, dragInfo.wallRect.width - dragInfo.el.offsetWidth));
-            newY = Math.max(0, Math.min(newY, dragInfo.wallRect.height - dragInfo.el.offsetHeight));
+            // Constrain to window boundaries so notes don't get lost
+            newX = Math.max(0, Math.min(newX, window.innerWidth - dragInfo.el.offsetWidth));
+            newY = Math.max(0, Math.min(newY, window.innerHeight - dragInfo.el.offsetHeight));
 
             dragInfo.el.style.left = `${newX}px`;
             dragInfo.el.style.top = `${newY}px`;
@@ -455,8 +570,7 @@
                 if (note) {
                     note.x = parseInt(dragInfo.el.style.left);
                     note.y = parseInt(dragInfo.el.style.top);
-                    // Restore original rotation
-                    dragInfo.el.style.transform = `rotate(${note.rotation}deg)`;
+                    dragInfo.el.style.transform = `rotate(${note.rotation}deg)`; // restore rotation
                 }
                 
                 dragInfo.el.classList.remove('dragging');
@@ -503,11 +617,12 @@
             onAuthStateChanged(auth, (user) => {
                 currentUser = user;
                 if (user && db) {
-                    const docRef = doc(db, 'artifacts', appId, 'users', user.uid, 'notes', 'sticky_wall');
+                    const docRef = doc(db, 'artifacts', appId, 'users', user.uid, 'notes', 'global_sticky_wall');
                     
                     if (unsubscribeNotes) unsubscribeNotes();
                     
                     unsubscribeNotes = onSnapshot(docRef, (docSnap) => {
+                        // Only sync from cloud if user isn't actively dragging or typing
                         if (docSnap.exists() && !isEditingNotes) {
                             const data = docSnap.data();
                             if (data.notes && Array.isArray(data.notes)) {
@@ -527,14 +642,18 @@
         }
 
         function loadLocalNotes() {
-            const localData = localStorage.getItem('yerevan_sticky_notes');
+            const localData = localStorage.getItem('yerevan_global_notes');
             if (localData) {
                 notesArray = JSON.parse(localData);
             } else {
-                // Default welcome note
                 notesArray = [{
-                    id: '1', text: "欢迎来到埃里温的时区！\n\n拖拽这张便签改变位置，或者点击右上角新增。", 
-                    x: 50, y: 50, color: colors[0], rotation: -2
+                    id: '1', 
+                    text: "欢迎来到全双语环境！\n\n拖动我到屏幕任意位置。停止打字后会自动双语翻译。\n---\nWelcome to the fully bilingual environment!\n\nDrag me anywhere on the screen. Auto-translates when you stop typing.", 
+                    lastSourceText: "欢迎来到全双语环境！\n\n拖动我到屏幕任意位置。停止打字后会自动双语翻译。",
+                    x: Math.max(0, (window.innerWidth / 2) - 250), 
+                    y: 150, 
+                    color: colors[0], 
+                    rotation: -2
                 }];
             }
             renderNotes();
@@ -543,17 +662,17 @@
         function scheduleSave() {
             setSaveStatusUI('saving');
             clearTimeout(saveTimeout);
-            saveTimeout = setTimeout(saveNotes, 1000); // Debounce typing
+            saveTimeout = setTimeout(saveNotes, 1000); // Debounce typing saves
         }
 
         async function saveNotes() {
             setSaveStatusUI('saving');
             try {
                 if (currentUser && db) {
-                    const docRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'notes', 'sticky_wall');
+                    const docRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'notes', 'global_sticky_wall');
                     await setDoc(docRef, { notes: notesArray, updatedAt: new Date() }, { merge: true });
                 } else {
-                    localStorage.setItem('yerevan_sticky_notes', JSON.stringify(notesArray));
+                    localStorage.setItem('yerevan_global_notes', JSON.stringify(notesArray));
                 }
                 setSaveStatusUI('success');
             } catch (error) {
@@ -564,11 +683,11 @@
 
         function setSaveStatusUI(state) {
             if (state === 'saving') {
-                saveStatus.innerHTML = `<i data-lucide="rotate-cw" class="w-3 h-3 mr-1 animate-spin"></i> 保存中`;
+                saveStatus.innerHTML = `<i data-lucide="rotate-cw" class="w-3 h-3 mr-1 animate-spin"></i> 同步中 | Syncing`;
             } else if (state === 'success') {
-                saveStatus.innerHTML = `<i data-lucide="check" class="w-3 h-3 mr-1 text-emerald-500"></i> 已同步`;
+                saveStatus.innerHTML = `<i data-lucide="check" class="w-3 h-3 mr-1 text-emerald-500"></i> 已同步 | Synced`;
             } else {
-                saveStatus.innerHTML = `<i data-lucide="x" class="w-3 h-3 mr-1 text-red-500"></i> 保存失败`;
+                saveStatus.innerHTML = `<i data-lucide="x" class="w-3 h-3 mr-1 text-red-500"></i> 失败 | Failed`;
             }
             lucide.createIcons();
         }
